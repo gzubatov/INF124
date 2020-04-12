@@ -1,0 +1,37 @@
+* {
+	font-family: sans-serif;
+}
+
+body {
+	margin: 0;
+}
+
+/* Navbar */
+.navbar {
+	display: grid;
+	grid-template-columns: 4fr 1fr;
+	background: gray;
+}
+
+.navigation {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+}
+
+.navigation li {
+	list-style-type: none;
+}
+
+.navigation li a {
+	text-decoration: none;
+	color: black;
+}
+
+.navigation li a:hover {
+	text-decoration: none;
+	color: white;
+}
+
+.navigation li a:visited {
+	text-decoration: none;
+}

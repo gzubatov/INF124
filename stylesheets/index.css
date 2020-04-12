@@ -1,0 +1,44 @@
+/* Jumbotron */
+.jumbotron {
+	background-color: pink;
+	height: 300px;
+	width: 100%;
+}
+
+/* main content */
+#main {
+	width: 95%;
+	margin: 0 auto;
+	display: grid;
+	grid-template-columns: 1fr 5fr;
+}
+
+/*filters*/
+.filter {
+	display: grid;
+	grid-template-columns: 1fr;
+	row-gap: 10%;
+}
+
+.filterblock {
+	background-color: rgb(175, 253, 192);
+	height: 100vh;
+}
+
+/* table */
+.table {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	justify-items: center;
+	align-items: center;
+	text-align: center;
+	padding: 1%;
+}
+
+.product img {
+	transition: 500ms;
+}
+
+.product img:hover {
+	transform: scale(1.1);
+}
