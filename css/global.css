@@ -8,9 +8,16 @@ body {
 
 /* Navbar */
 .navbar {
+	z-index: 1;
 	display: grid;
 	grid-template-columns: 4fr 1fr;
-	background: gray;
+	padding: 10px;
+	box-shadow: 1px -1px 5px 1px;
+	background-color: #f0f0f0;
+}
+
+.navbar img {
+	height: 50px;
 }
 
 .navigation {
