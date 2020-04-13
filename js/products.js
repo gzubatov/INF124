@@ -9,7 +9,7 @@ function run() {
 		const shipAddress = document.querySelector('#addr').value;
 		const creditCardNum = document.querySelector('#ccn').value;
 		const ccv = document.querySelector('#security').value;
-		const phone = document.querySelector('#phoneNum').value;
+		const phoneNum = document.querySelector('#phonenum').value;
 
 		if (isNaN(qty) === false && parseInt(qty) <= 0) {
 			alert('Cannot enter Quantity Value below 1');
