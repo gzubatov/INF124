@@ -1,6 +1,6 @@
 #main {
 	margin-top: 10px;
-	padding-top: 50px;
+	padding-top: 25px;
 	display: grid;
 	width: 70%;
 	margin: 0 auto;
@@ -40,4 +40,8 @@ select {
 	border: 1px solid #ccc;
 	border-radius: 3px;
 	font-size: 18px;
+}
+
+.expDate select {
+	width: 49.5%;
 }
