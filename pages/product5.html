@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+
+<!--
+WRITTEN BY: Greg Zubatov, .., .., .., Genesis Garcia 
+EMAIL: gzubatov@uci.edu, .., .., .., genesirg@uci.edu
+-->
+
+<head>
+  <meta charset="utf-8">
+  <meta name="author" content="co-authored by Greg Zubatov, .., .., .., Genesis Garcia">
+  <meta name="description" content="ECommerce Website">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/products.css">
+  <script src="../js/products.js"></script>
+  
+
+  
+  <title>Ant-R-Us</title>
+
+  
+</head>
+
+<body>
+  <!-- Navbar -->
+    <div class="navbar">
+      <div class="logo"><img src="../imgs/ant_logo.png" alt="Ants R Us Logo"></div>
+      <div class="pages">
+        <ul class="navigation">
+          <li><a href="../index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+    </div>
+
+    
+    
+  <div id="main">
+    <div id = "info">
+		  <img src="https://source.unsplash.com/400x400" alt="Product image">
+		  <h3>Product name - $0.00</h3>
+		  <p>description</p>
+    </div>
+    
+    <div id = "form">
+      <h3>Order Form:</h3>
+		<form action="mailto:antsrus@mail.com" method="post" enctype="text/plain">
+      <label for = "prodid" >Product Identifier</label>
+     
+	  	<input type="text" id="prod_id" name="prod_id" value="SKU-5" disabled>
+	  <label for="Quantity">Quantity</label>
+    <input type="text" id="quantity" name="quantity">
+       
+	
+	<label for="fname">First name</label>
+	<input type="text" id="fname" name="fname">
+	<label for="lname">Last name</label>
+  <input type="text" id="lname" name="lname">
+
+  <label for="lname">Phone Number</label>
+  <input type="text" id="phonenum" name="phonenum">
+  
+  <label for="addr">Shipping Address</label>
+  <input type="text" id="addr" name="addr">
+
+  
+  <label for="shipping">Shipping Method</label>
+  
+  <select id="shipping" name="shipping">
+    <option value="overnight">Overnight</option>
+    <option value="expedited">2-days Expedited</option>
+    <option value="ground">6-days Ground</option>
+  </select>
+
+  
+	<label for="ccn">Credit Card Number</label>
+	<input type="text" id="ccn" name="ccn">
+  
+  <div class="expDate">
+  <label for="expdate">Expiration Date</label>
+    
+    <select id="expmo" name="expmo">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+      <option value="11">11</option>
+      <option value="12">12</option>
+    </select>
+
+    <select id="expyr" name="expyr">
+      <option value="2020">2020</option>
+      <option value="2021">2021</option>
+      <option value="2022">2022</option>
+      <option value="2023">2023</option>
+      <option value="2024">2024</option>
+      <option value="2025">2025</option>
+      <option value="2026">2026</option>
+      <option value="2027">2027</option>
+      <option value="2028">2028</option>
+      <option value="2029">2029</option>
+      <option value="2030">2030</option>
+      <option value="2031">2031</option>
+    </select>
+  </div>
+  <label for="security">Security Code</label>
+  <input type ="text" id="security" name = "security" placeholder="CVV"/>
+  <input type = "submit" value = "Purchase"/>
+</form>
+    </div>
+  </div>
+
+</body>
+</html>

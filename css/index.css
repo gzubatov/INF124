@@ -35,10 +35,13 @@
 	padding: 1%;
 }
 
-.product img {
+.product {
+	box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.75);
+	margin: 10px;
+	background-color: white;
 	transition: 500ms;
 }
 
-.product img:hover {
+.product:hover {
 	transform: scale(1.1);
 }
