@@ -1,5 +1,7 @@
 window.onload = run;
 
+let errors = '';
+
 function run() {
 	const onFormSubmit = (event) => {
 		const qty = document.querySelector('#quantity').value;
@@ -15,6 +17,11 @@ function run() {
 		verifyPhoneNumber(phoneNum);
 		verifyAddress(shipAddress);
 		verifyCreditCard(creditCardNum, ccv);
+
+		if (errors !== '') {
+			alert(errors);
+			event.preventDefault();
+		}
 	};
 
 	const form = document.querySelector('form');
@@ -26,48 +33,40 @@ Functions to verify the form input
 */
 function verifyQuantity(qty) {
 	if (qty.length === 0) {
-		alert('Must enter a quanity');
-		event.preventDefault();
+		errors += 'Must enter a quantity\n';
 	}
 	else if (isNaN(qty) === false && parseInt(qty) <= 0) {
-		alert('Cannot enter Quantity Value below 1');
-		event.preventDefault();
+		errors += 'Cannot enter Quantity Value below 1\n';
 	}
 }
 
 function verifyName(firstName, lastName) {
 	if (firstName === '') {
-		alert('First Name Field is empty');
-		event.preventDefault();
+		errors += 'First Name Field is empty\n';
 	}
 	if (lastName === '') {
-		alert('Last Name Field is empty');
-		event.preventDefault();
+		errors += 'Last Name Field is empty\n';
 	}
 }
 
 function verifyPhoneNumber(phoneNum) {
 	if (phoneNum === '') {
-		alert('Phone Number Field is empty');
-		event.preventDefault();
+		errors += 'Phone Number Field is empty\n';
 	}
 }
 
 function verifyAddress(shipAddress) {
 	if (shipAddress === '') {
-		alert('Shipping Address Field is empty');
-		event.preventDefault();
+		errors += 'Shipping Address Field is empty\n';
 	}
 }
 
 function verifyCreditCard(creditCardNum, ccv) {
 	if (isNaN(creditCardNum) === false && creditCardNum.length !== 16) {
-		alert('Credit card number is invalid. Should be 16 digits.');
-		event.preventDefault();
+		errors += 'Credit card number is invalid. Should be 16 digits.\n';
 	}
 
 	if (isNaN(ccv) === false && ccv.length !== 3) {
-		alert('CCV is invalid. Should be 3 digits.');
-		event.preventDefault();
+		errors += 'CCV is invalid. Should be 3 digits.\n';
 	}
 }

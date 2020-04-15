@@ -30,18 +30,23 @@
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	justify-items: center;
-	align-items: center;
+	/*align-items: center;*/
 	text-align: center;
 	padding: 1%;
 }
 
 .product {
-	box-shadow: 10px 10px 16px -10px rgba(0,0,0,0.75);
+	box-shadow: 10px 10px 16px -10px rgba(0, 0, 0, 0.75);
 	margin: 10px;
 	background-color: white;
 	transition: 500ms;
+	max-height: 300px;
 }
 
 .product:hover {
 	transform: scale(1.1);
+}
+
+.hidden {
+	display: none;
 }
