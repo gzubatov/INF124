@@ -15,21 +15,24 @@
 
 /*filters*/
 .filter {
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 25px;
 	display: grid;
 	grid-template-columns: 1fr;
+	border: 1px solid gray;
+	border-radius: 5%;
+	padding-left: 10px;
+	padding-bottom: 10px;
+	box-shadow: 10px 10px 16px -10px rgba(0, 0, 0, 0.75);
 }
 
 .filterblock {
-	height: 100vh;
+	height: 100%;
 }
 
 .filterblock h3 {
 	color: #f63140;
-}
-
-.filter {
-	margin-left: 20px;
-	margin-right: 20px;
 }
 
 /* This code is for changing the style of the filter checkboxes */
