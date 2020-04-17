@@ -43,6 +43,11 @@
 	max-height: 300px;
 }
 
+.product img {
+	width: 250px;
+	height: 250px;
+}
+
 .product:hover {
 	transform: scale(1.1);
 }

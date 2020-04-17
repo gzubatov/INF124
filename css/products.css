@@ -45,3 +45,9 @@ select {
 .expDate select {
 	width: 49.5%;
 }
+
+#info img {
+	border: 1px solid black;
+	width: 400px;
+	height: 400px;
+}
