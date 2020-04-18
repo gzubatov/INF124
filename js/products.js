@@ -26,6 +26,7 @@ function run() {
 			alert(errors);
 			event.preventDefault();
 		}
+		errors = '';
 	};
 
 	const form = document.querySelector('form');
