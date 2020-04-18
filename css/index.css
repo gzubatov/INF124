@@ -3,6 +3,23 @@
 	background-color: pink;
 	height: 300px;
 	width: 100%;
+	background: url('../imgs/origami.jpeg');
+	backdrop-filter: blur(1px) brightness(.2);
+}
+
+.jumbotron div {
+	height: 100%;
+	margin: auto;
+	text-align: center;
+	background-color: rgba(0, 0, 0, .4);
+}
+
+.jumbotron h1 {
+	padding-top: 70px;
+	margin: auto;
+	font-size: 100px;
+	font-family: 'Playfair Display', serif;
+	color: rgb(255, 255, 255);
 }
 
 /* main content */
@@ -20,11 +37,11 @@
 	margin-top: 25px;
 	display: grid;
 	grid-template-columns: 1fr;
-	border: 1px solid gray;
+	border: 1px solid rgba(220, 220, 220, 0.75);
 	border-radius: 5%;
 	padding-left: 10px;
 	padding-bottom: 10px;
-	box-shadow: 10px 10px 16px -10px rgba(0, 0, 0, 0.75);
+	box-shadow: 10px 10px 16px -10px rgba(220, 220, 220, 0.75);
 }
 
 .filterblock {
@@ -32,10 +49,10 @@
 }
 
 .filterblock h3 {
-	color: #f63140;
+	color: teal;
 }
 
-/* This code is for changing the style of the filter checkboxes */
+/* This code is for ch anging the style of the filter checkboxes */
 /* Comes from W3 Schools: https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */
 .checkbox {
 	width: 100%;
@@ -67,15 +84,15 @@
 	height: 15px;
 	transition: transform 0.28s ease;
 	border-radius: 3px;
-	border: 2px solid #f63140;
+	border: 2px solid teal;
 }
 .checkbox label:after {
 	content: '';
 	display: block;
 	width: 10px;
 	height: 5px;
-	border-bottom: 2px solid #f63140;
-	border-left: 2px solid #f63140;
+	border-bottom: 2px solid teal;
+	border-left: 2px solid teal;
 	-webkit-transform: rotate(-45deg) scale(0);
 	transform: rotate(-45deg) scale(0);
 	transition: transform ease 0.25s;
@@ -85,7 +102,7 @@
 	left: 8px;
 }
 .checkbox input[type="checkbox"]:checked ~ label::before {
-	color: #f63140;
+	color: teal;
 }
 
 .checkbox input[type="checkbox"]:checked ~ label::after {
@@ -124,11 +141,12 @@
 }
 
 .product {
-	box-shadow: 10px 10px 16px -10px rgba(0, 0, 0, 0.75);
+	box-shadow: 10px 10px 16px -10px rgba(220, 220, 220, 0.75);
 	margin: 10px;
-	background-color: white;
+	background-color: rgba(128, 255, 212, 0.4);
+	color: black;
 	transition: 500ms;
-	max-height: 300px;
+	max-height: 330px;
 }
 
 .product img {
@@ -136,7 +154,7 @@
 	height: 250px;
 }
 
-.product:hover {
+.product-scale {
 	transform: scale(1.1);
 }
 
