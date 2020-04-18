@@ -13,7 +13,7 @@ body {
 	grid-template-columns: 4fr 1fr;
 	padding: 10px;
 	box-shadow: 1px -1px 5px 1px;
-	background-color: #f0f0f0;
+	background-color: white;
 }
 
 .navbar img {
@@ -32,11 +32,13 @@ body {
 .navigation li a {
 	text-decoration: none;
 	color: black;
+	transition: .5s;
+	font-size: 20px;
 }
 
 .navigation li a:hover {
 	text-decoration: none;
-	color: white;
+	color: teal;
 }
 
 .navigation li a:visited {

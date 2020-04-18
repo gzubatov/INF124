@@ -18,7 +18,7 @@ Swan Toma	    sktoma@uci.edu
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/global.css" />
     <link rel="stylesheet" href="./css/index.css" />
     
@@ -41,31 +41,33 @@ Swan Toma	    sktoma@uci.edu
 
     <!-- Jumbotron -->
     <div class="jumbotron">
-      <!--<img src="https://source.unsplash.com/random" alt = "jumbotron" /> -->
+      <div>
+      <h1>Arts & Crafts</h1>
+    </div>
     </div>
 
     <!--Main Content-->
     <div id="main">
       <!--Filters-->
       <div class="filterblock">
-        <h3>Filter by Categories</h3>
-
+        
         <div class="filter">
-          <div>
+          <h3>Filter by Categories</h3>
+          <div class="checkbox">
             <input type="checkbox" id="floral" name="filter" //>
-            <label for="floral">Floral</label>
+            <label for="floral"><span>Floral</span></label>
           </div>
-          <div>
+          <div class="checkbox">
             <input type="checkbox" id="crafts-hobbies" name="filter" //>
-            <label for="filter2">Crafts and Hobbies</label>
+            <label for="crafts-hobbies"><span>Crafts and Hobbies</span></label>
           </div>
-          <div>
+          <div class="checkbox">
             <input type="checkbox" id="home-office" name="filter" //>
-            <label for="home-office">Home Office</label>
+            <label for="home-office"><span>Home Office</span></label>
           </div>
-          <div>
+          <div class="checkbox">
             <input type="checkbox" id="knitting-crochet" name="filter" />
-            <label for="filter4">Knitting and Crochet</label>
+            <label for="knitting-crochet"><span>Knitting and Crochet</span></label>
           </div>
         </div>
       </div>
@@ -73,62 +75,76 @@ Swan Toma	    sktoma@uci.edu
       <div class="table">
         <div class="floral home-office product" onclick="window.location='pages/product1.html';">
           <img src="./imgs/products/mini_cactus.jpg" />
+          <div>
           <p>Mini Cactus</p>
+          <p>$7.99</p>
+        </div>
         </div>
 
         <div class="crafts-hobbies product" onclick="window.location='pages/product2.html';">
           <img src="./imgs/products/gazebo_birdhouse_kit.jpg" />
           <p>Gazebo Birdhouse Kit</p>
+          <p>$19.99</p>
         </div>
 
         <div class="home-office product" onclick="window.location='pages/product3.html';">
           <img src="./imgs/products/vintage_drafting_table.jpg" />
           <p>Vintage Drafting Table</p>
+          <p>$199.99</p>
         </div>
 
         <div class="floral product" onclick="window.location='pages/product4.html';">
           <img src="./imgs/products/rose_bundle.jpg" />
           <p>Rose Bundle</p>
+          <p>$12.99</p>
         </div>
 
         <div class="floral product" onclick="window.location='pages/product5.html';">
           <img src="./imgs/products/green_patio_vase.jpg" />
           <p>Green Patio Vase</p>
+          <p>$21.99</p>
         </div>
 
         <div class="crafts-hobbies product" onclick="window.location='pages/product6.html';">
           <img src="./imgs/products/wood_glue.jpg" />
           <p>Carpenter's Wood Glue</p>
+          <p>$3.99</p>
         </div>
 
         <div class="home-office product" onclick="window.location='pages/product7.html';">
           <img src="./imgs/products/organizer_cube_drawer.jpg" />
           <p>Organizer Cube Drawer</p>
+          <p>$12.99</p>
         </div>
 
         <div class="crafts-hobbies product" onclick="window.location='pages/product8.html';">
           <img src="./imgs/products/lighthouse_birdhouse_kit.jpg" />
           <p>Lighthouse Birdhouse Kit</p>
+          <p>$5.99</p>
         </div>
 
         <div class="floral product" onclick="window.location='pages/product9.html';">
           <img src="./imgs/products/artificial_wreath.jpg" />
           <p>Artificial Wreath</p>
+          <p>$39.99</p>
         </div>
 
         <div class="crafts-hobbies knitting-crochet product" onclick="window.location='pages/product10.html';">
           <img src="./imgs/products/blue_yarn.jpg" />
           <p>Blue Yarn</p>
+          <p>$9.99</p>
         </div>
 
         <div class="home-office product" onclick="window.location='pages/product11.html';">
           <img src="./imgs/products/desktop_cube_organizer.jpg" />
           <p>Desktop Cube Organizer</p>
+          <p>$24.00</p>
         </div>
 
         <div class="crafts-hobbies knitting-crochet product" onclick="window.location='pages/product12.html';">
           <img src="./imgs/products/red_yarn.jpg" />
           <p>Red Yarn</p>
+          <p>$9.99</p>
         </div>
       </div>
     </div>

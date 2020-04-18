@@ -1,6 +1,18 @@
 const products = document.querySelectorAll('.product');
 const filters = Array.from(document.querySelectorAll('input[name="filter"]'));
 
+// image hover zoom
+products.forEach((product) => {
+	product.addEventListener('mouseover', function(event) {
+		product.classList.add('product-scale');
+	});
+
+	product.addEventListener('mouseleave', function(event) {
+		product.classList.remove('product-scale');
+	});
+})
+
+
 //const categories = [ 'floral', 'crafts-hobbies', 'home-office', 'knitting-crochet' ];
 const categories = {
 	floral             : 'floral',
