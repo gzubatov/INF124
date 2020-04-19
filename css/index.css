@@ -131,13 +131,26 @@
 /* END code for changing the style of the filter checkboxes */
 
 /* table */
+/* version Grid
 .table {
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
 	justify-items: center;
-	/*align-items: center;*/
+	
 	text-align: center;
 	padding: 1%;
+}
+*/
+/* Version Flexbox */
+.table {
+	margin: 0 auto;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	align-content: center;
+	max-width: 1100px;
 }
 
 .product {
