@@ -61,7 +61,6 @@ select {
 }
 
 #info img {
-	border: 1px solid black;
 	width: 400px;
 	height: 400px;
 }
@@ -71,4 +70,64 @@ select {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	column-gap: 5%;
+}
+
+/*
+ * ipad pro: 1024 x 1366 px
+ */
+@media (max-width: 1024px) {
+	#main {
+		width: 90%;
+	}
+
+	.addr select {
+		margin-left: 10px;
+		height: 2.5rem;
+		font-size: 14px;
+	}
+
+	.expDate select {
+		width: 48.5%;
+	}
+}
+
+/*
+ * ipad pro: 768 x 1024 px
+ */
+@media (max-width: 768px) {
+	#main {
+		grid-template-columns: 1fr;
+	}
+
+	#info {
+		display: grid;
+		grid-template-columns: 1fr 3fr;
+		column-gap: 5%;
+		border-bottom: 1px solid black;
+	}
+
+	#info img {
+		width: 250px;
+		height: 250px;
+		margin-bottom: 20px;
+	}
+	#form {
+		margin-top: 5px;
+	}
+}
+
+/*
+ * ipad pro: 768 x 1024 px
+ */
+@media (max-width: 375px) {
+	#info {
+		grid-template-columns: 1fr;
+	}
+
+	#info img {
+		margin: 0 auto;
+		width: 200px;
+		height: 200px;
+		margin-bottom: 20px;
+	}
 }

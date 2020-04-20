@@ -44,3 +44,31 @@ body {
 .navigation li a:visited {
 	text-decoration: none;
 }
+
+/*
+iphone dimensions: about 400 x 700 px
+*/
+@media (max-width: 813px) {
+	.navbar {
+		z-index: 1;
+		display: grid;
+		grid-template-columns: 1fr;
+		padding: 10px;
+		box-shadow: 1px -1px 5px 1px;
+		background-color: white;
+	}
+	.navbar {
+		justify-items: center;
+	}
+
+	.navbar img {
+		height: 40px;
+	}
+	.navigation li a {
+		padding: 15px;
+	}
+
+	ul.navigation {
+		padding-left: 0px;
+	}
+}

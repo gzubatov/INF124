@@ -37,6 +37,7 @@
 	margin-top: 25px;
 	display: grid;
 	grid-template-columns: 1fr;
+	min-width: 200px;
 	border: 1px solid rgba(220, 220, 220, 0.75);
 	border-radius: 5%;
 	padding-left: 10px;
@@ -46,6 +47,7 @@
 
 .filterblock {
 	height: 100%;
+	/*min-width: 300px;*/
 }
 
 .filterblock h3 {
@@ -147,10 +149,15 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	justify-content: center;
+
 	text-align: center;
 	align-content: center;
 	max-width: 1100px;
+}
+
+.table a {
+	text-decoration: none;
+	color: black;
 }
 
 .product {
@@ -173,4 +180,15 @@
 
 .hidden {
 	display: none;
+}
+
+@media (max-width: 667px) {
+	#main {
+		display: grid;
+		grid-template-columns: 1fr;
+	}
+
+	.jumbotron h1 {
+		font-size: 75px;
+	}
 }
