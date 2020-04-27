@@ -1,0 +1,40 @@
+INSERT INTO 
+	products (name, price, description, image, details)
+VALUES
+    ("Mini Cactus", 7.99, "Do you love plants, but do not have a green thumb or the time to care for them? Then this mini potted cactus plants will be the perfect addition to your home.  The extremely realistic cactus plants come nestled in a silver tin pot and are set in faux dirt for stability.", "./imgs/products/mini_cactus.jpg", "Green, Overall dimensions: 3.5\" x 2.5\", Pot dimensions: 2.5\" x 2.5\" top diameter x 1.75\" bottom diameter, Plastic and tin, Recommended for indoor and covered outdoor use"),
+	("Gazebo Birdhouse Kit", 19.99, "Wood birdhouse makes a fun decoration for your home or garden. Embellish with stains, colorful paints, decoupage designs and more.", "./imgs/products/gazebo_birdhouse_kit.jpg", "Unfinished wood, 7.48\" x 6.6\" x 9.84\", 6 sided, Hanging cord attached"),
+	("Vintage Drafting Table", 199.99, "The Traditional Drafting Table and Craft Station features a large, durable, tilting 36.5\" high desktop for drawing and drafting, as well as two side shelves that keep supplies level for projects. The large drawer and bottom shelf offer additional storage, which is always needed for craft or art supplies.", "./imgs/products/vintage_drafting_table.jpg", "Overall dimensions: 47.5\" x 23.5\" x 36.5\", Cherry vinyl on a PB wood top: 35.5\" x 23.5\", Tilt angle adjustment: 47 degrees, Powder coated charcoal frame, Metal pull-out drawer: 35.5\" x 10.5\", Top of side shelves: 6\" x 23.5\", Bottom of side helves: 6\" x 22\", Bottom shelf: 35.5\" x 9\", Slide-up pencil ledge: 23.5\", 4 floor levelers for stability"),
+	("Rose Bundle", 12.99, "Celebrate your special event by using this beautiful rose bouquet. This impeccable rose bundle is perfect for the do-it-yourself wedding, shower or luncheon, with a fresh design that makes it easy to create that ideal experience.", "./imgs/products/rose_bundle.jpg", "Available in multiple colors, Bundle measures approximately 8\", Single bundle of multiple roses, Composed of 65% polyester 25% plastic and 10% wire"),
+	("Green Patio Vase", 21.99, "Lime Green And Gray Outdoor Patio Cutout Vase", "./imgs/products/green_patio_vase.jpg", "Dimensions: 4.5 inches (L) x 4.5 inches (W) x 15.0 inches (H), Weight: 1.4 pounds"),
+	("Carpenter's Wood Glue", 3.99, "This wood glue is for furiture repair and household projects. Intended for softwoods, hardwoords, and porous materials in general. Is fast and bonds strong!", "./imgs/products/wood_glue.jpg", "4 oz. bottle, Nontoxic, For indoor use only"),
+	("Organizer Cube Drawer", 12.00, "A nicely styled design drawer with practical features. Rounded corners that give a smooth edge and contains easy to open drawers.", "./imgs/products/organizer_cube_drawer.jpg", "Inner Dimensions: 10.75\"L x 12.25\"W x 12.25\"H, Weight tolerance: 24 lbs. For single unit, 6 lbs. Each drawer 11 lbs."),
+	("Lighthouse Birdhouse Kit", 5.99, "The creative possibilities for enhancing a wood lighthouse are limitless. You can customize this lighthouse-shaped birdhouse with paints, stains, decoupaged paper, stickers, beads and much more to use it for decorating your home.", "./imgs/products/lighthouse_birdhouse_kit.jpg", "Unfinished wood, 4.84\" x 4.21\" x 10.4\", 3 openings"),
+	("Artificial Wreath", 39.99, "The Bloom Room Boxwood Wreath is sure to add a style statement to your home decor this spring. Place this gorgeous faux boxwood wreath as is on your front door or mantelshelf for a simple yet elegant look. You can also decorate it with colorful ribbons, faux flowers and berry twigs to enhance its visual appeal.", "./imgs/products/artificial_wreath.jpg", "Brand: Bloom Room, Dimensions: 10 x 3 inches"),
+	("Blue Yarn", 9.99, "This yarn is a 100% acrylic, easy care, all-purpose yarn that comes in a large assortment of colors. This hugely popular yarn is solid and durable, has a traditional hand, and no-dye-lot solids make it ideal for afghans, sweaters, accessories and more.", "./imgs/products/blue_yarn.jpg", "Weight: Medium (4), Contents: 100% acrylic, Skein Weight: 7 oz. / 198 g, Yardage: 364 yd. / 333, Knitting Gauge: 17 sts - 23 rows = 4\" (10 cm), Crochet Gauge: 12 sc - 15 rows = 4\" (10 cm), Suggested Knitting Needle: 5 mm US - 8, Suggested Crochet Hook: 5.5 mm US - I/9"),
+	("Desktop Cube Organizer", 24.00, "Customize your storage system with this efficient piece. Designed to fit atop modular storage cubes, this organizing tray has movable dividers so that you can customize it for any use.", "./imgs/products/desktop_cube_organizer.jpg", "White, 14.25\" x 14.5\" x 6.3\", MDF with NC lacquer, Supplies and other modular storage pieces sold separately"),
+	("Red Yarn", 9.99, "This yarn is a 100% acrylic, easy care, all-purpose yarn that comes in a large assortment of colors. This hugely popular yarn is solid and durable, has a traditional hand, and no-dye-lot solids make it ideal for afghans, sweaters, accessories and more.", "./imgs/products/red_yarn.jpg", "Weight: Medium (4), Contents: 100% acrylic, Skein Weight: 7 oz. / 198 g, Yardage: 364 yd. / 333 m, Knitting Gauge: 17 sts - 23 rows = 4\" (10 cm), Crochet Gauge: 12 sc - 15 rows = 4\" (10 cm), Suggested Knitting Needle: 5 mm US - 8, Suggested Crochet Hook: 5.5 mm US - I/9")
+
+INSERT INTO
+	categories (category)
+VALUES
+	("floral"),
+	("home-office"),
+	("product"),
+	("crafts-hobbies"),
+	("knitting-crochet")
+
+INSERT INTO 
+	product_has_category (pid, cid)
+VALUES
+	(1, 1), (1, 3), (1, 2),
+	(2, 4), (2, 3),
+	(3, 2), (3, 3),
+	(4, 1), (4, 3),
+	(5, 1), (5, 3),
+	(6, 4), (6, 3),
+	(7, 2), (7, 3),
+	(8, 4), (8, 3),
+	(9, 1), (9, 3),
+	(10, 4), (10, 3), (10, 5),
+	(11, 2), (11, 3),
+	(12, 4), (12, 3), (12, 5)

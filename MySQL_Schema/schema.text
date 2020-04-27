@@ -1,0 +1,21 @@
+name, price, description, image source, details
+pid, name, price, description, image source
+1, Mini Cactus, 7.99, "
+
+12,Red Yarn,9.99,
+
+categories
+c.id      name                 
+  1       floral                        
+  2       home-office                         
+  3       knitting                               
+
+
+map
+cid pid     
+ 1  1    
+ 2  1     
+         
+Primary key(cid, pid)
+
+SELECT c.name from product as p, categories as c, map as m where p.pid = c.pid AND m.cid = c.cid
