@@ -10,10 +10,20 @@ products.forEach((product) => {
 	product.addEventListener('mouseleave', function(event) {
 		product.classList.remove('product-scale');
 	});
-})
 
+	product.addEventListener('click', function(event) {
+		const pid = event.currentTarget.id;
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			//console.log('callback function swan');
+			//console.log(this.response);
+			location.href = './pages/product.php?pid=' + pid;
+		};
+		xhr.open('GET', './pages/product.php?pid=' + pid, true);
+		xhr.send();
+	});
+});
 
-//const categories = [ 'floral', 'crafts-hobbies', 'home-office', 'knitting-crochet' ];
 const categories = {
 	floral             : 'floral',
 	'crafts-hobbies'   : 'crafts-hobbies',
@@ -22,7 +32,6 @@ const categories = {
 };
 
 let activeFilters = [];
-
 
 filters.forEach((filter, index) => {
 	filter.addEventListener('click', () => {
@@ -33,7 +42,6 @@ filters.forEach((filter, index) => {
 		else if (!filter.checked && activeFilters.includes(filter)) {
 			activeFilters = activeFilters.filter((f) => f !== filter);
 		}
-		
 
 		products.forEach((product) => {
 			// flag = false
@@ -63,40 +71,3 @@ filters.forEach((filter, index) => {
 		}
 	});
 });
-
-/*
-
-if (filter.checked) {
-			products.forEach((product) => {
-				if (product.classList.contains(categories[index])) {
-					product.classList.add('hidden');
-				}
-			});
-		}
-		else {
-			products.forEach((product) => {
-				if (product.classList.contains(categories[index])) {
-					product.classList.remove('hidden');
-				}
-            });
-            
-            */
-
-/*
-filters[0].addEventListener('click', () => {
-	if (filters[0].checked) {
-		products.forEach((product) => {
-			if (product.classList.contains('floral')) {
-				product.classList.add('hidden');
-			}
-		});
-	}
-	else {
-		products.forEach((product) => {
-			if (product.classList.contains('floral')) {
-				product.classList.remove('hidden');
-			}
-		});
-	}
-});
-*/

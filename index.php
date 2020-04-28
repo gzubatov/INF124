@@ -22,10 +22,11 @@
 			$product_categories .= $row2['category'] . ' ';
 		}
 
+		$pid = $row['pid'];
 		$name = $row['name'];
 		$price = $row['price'];
 		$image = "<img src='".$row["image"]."'/>";
-		$product = "<a><div class='".$product_categories. "'>".$image."<div><p>".$name."</p><p>$".$price."</p></div></div></a>";
+		$product = "<a><div id='".$pid."' class='".$product_categories. "'>".$image."<div><p>".$name."</p><p>$".$price."</p></div></div></a>";
 		$fragment->appendXML($product);
 		$src->appendChild($fragment);
 
