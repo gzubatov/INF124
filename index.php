@@ -11,12 +11,25 @@
 
 	// Dynamically push products to index.html
 	while ( $row = $stmt->fetch(PDO::FETCH_ASSOC) ) {
+		// Fetch categories
+		$stmt2 = $pdo->query('SELECT c.category 
+		FROM products as p, categories as c, product_has_category as pc 
+		WHERE p.pid = pc.pid AND c.cid = pc.cid AND p.pid = ' . $row['pid']);
+		
+		$product_categories = '';
+		while( $row2 = $stmt2->fetch(PDO::FETCH_ASSOC))
+		{
+			$product_categories .= $row2['category'] . ' ';
+		}
+
 		$name = $row['name'];
 		$price = $row['price'];
 		$image = "<img src='".$row["image"]."'/>";
-		$product = "<a><div class='product'>".$image."<div><p>".$name."</p><p>$".$price."</p></div></div></a>";
+		$product = "<a><div class='".$product_categories. "'>".$image."<div><p>".$name."</p><p>$".$price."</p></div></div></a>";
 		$fragment->appendXML($product);
 		$src->appendChild($fragment);
+
 	}
+	
 	echo $html->saveHTML();
 ?>
