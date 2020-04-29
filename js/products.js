@@ -1,5 +1,4 @@
 window.onload = run;
-
 let errors = '';
 
 function run() {
@@ -14,7 +13,7 @@ function run() {
 		const phoneNum = document.querySelector('#phonenum').value;
 		const city = document.querySelector('#city').value;
 		const zip = document.querySelector("#zipcode").value;
-		
+
 		verifyIdentifier(identifier);
 		verifyQuantity(qty);
 		verifyName(firstName, lastName);
@@ -31,14 +30,15 @@ function run() {
 
 	const form = document.querySelector('form');
 	form.addEventListener('submit', onFormSubmit);
+
+	document.querySelector('#zipcode').addEventListener('blur', getZip);
 }
 
 /*
 Functions to verify the form input
 */
 function verifyIdentifier(identifier) {
-	if(identifier === '')
-	{
+	if (identifier === '') {
 		errors += 'Product Identifier field is empty\n';
 	}
 }
@@ -86,5 +86,32 @@ function verifyCreditCard(creditCardNum, ccv) {
 
 	if (isNaN(ccv) || ccv.length !== 3) {
 		errors += 'CCV is invalid. Should be 3 digits.\n';
+	}
+}
+
+function getZip(event) {
+	let zipcode = event.target.value;
+
+	if (zipcode !== "" && !isNaN(zipcode)) {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				var result = xhr.responseText;
+				const res = JSON.parse(result);
+				if (res['city'] !== -1) {
+					const qty = document.querySelector('#quantity').value;
+					document.querySelector('#city').value = res['city'];
+					document.querySelector('#state').value = res['state'];
+					document.querySelector('#tax').value = res['combined_rate'];
+					const price = document.querySelector('#price').value.substring(1);
+					const tax = 1 + parseFloat(document.querySelector('#tax').value);
+					const total = price * tax * qty;
+					document.querySelector('#total').value = '$' + total.toFixed(2);
+				}
+			};
+		}
+
+		xhr.open('GET', '../pages/getZip.php?zip=' + zipcode, true);
+		xhr.send();
 	}
 }

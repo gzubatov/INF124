@@ -3,21 +3,21 @@ const filters = Array.from(document.querySelectorAll('input[name="filter"]'));
 
 // image hover zoom
 products.forEach((product) => {
-	product.addEventListener('mouseover', function(event) {
+	product.addEventListener('mouseover', function (event) {
 		product.classList.add('product-scale');
 	});
 
-	product.addEventListener('mouseleave', function(event) {
+	product.addEventListener('mouseleave', function (event) {
 		product.classList.remove('product-scale');
 	});
 
-	product.addEventListener('click', function(event) {
+	product.addEventListener('click', function (event) {
 		const pid = event.currentTarget.id;
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			//console.log('callback function swan');
-			//console.log(this.response);
-			location.href = './pages/product.php?pid=' + pid;
+		xhr.onreadystatechange = function () {
+			if (xhr.readyState == 4 && xhr.status == 200) {
+				location.href = './pages/product.php?pid=' + pid;
+			};
 		};
 		xhr.open('GET', './pages/product.php?pid=' + pid, true);
 		xhr.send();
@@ -25,10 +25,10 @@ products.forEach((product) => {
 });
 
 const categories = {
-	floral             : 'floral',
-	'crafts-hobbies'   : 'crafts-hobbies',
-	'home-office'      : 'home-office',
-	'knitting-crochet' : 'knitting-crochet'
+	floral: 'floral',
+	'crafts-hobbies': 'crafts-hobbies',
+	'home-office': 'home-office',
+	'knitting-crochet': 'knitting-crochet'
 };
 
 let activeFilters = [];

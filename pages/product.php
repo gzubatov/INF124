@@ -1,33 +1,7 @@
 <?php
-   /* $html = new DOMDocument(); 
-	libxml_use_internal_errors(true);
-	$html->loadHTMLFile('./product.html'); 
-	*/
-	// MySQL connection
 	$pdo = new PDO('mysql:host=localhost;dbname=test', 'root');
 	$stmt = $pdo->query('SELECT * FROM products WHERE pid = ' . $_GET['pid']);
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	//$html->getElementById('product_image')->setAttribute('src', '.'.$row['image']);
-  //$html->getElementById('name').innerHTML = ''. $row['name'];
-	  //$h3s = $html->getElementsByTagName('h3');
-	  //foreach ($item as $h3s) {
-		//echo $item->nodeValue
-	//}
-  	//echo $row['name'];
-  	//echo $html->saveHTML();
-  /*
-  $html = new DOMDocument(); 
-  $html->loadHTMLFile('./test.html'); 
-  $html->getElementById('bc')->setAttribute("src", "./border-collie.jpg");
-  $html->saveHTMLFile("./test.html");
-	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	$html->getElementById('product_image')->setAttribute('src', '../imgs/border-collie.jpg');
-  $html->saveHTMLFile('./product.html');
-  /*
-  $html = new DOMDocument(); 
-  $html->loadHTMLFile('./test.html'); 
-  $html->getElementById('bc')->setAttribute("src", "./border-collie.jpg");
-  $html->saveHTMLFile("./test.html");*/
 ?>
 
 <!doctype html>
@@ -46,7 +20,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
   
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/products.css">
-  <script src="../js/products.js"></script>
+  <script src="./../js/products.js"></script>
   
 
   
@@ -61,7 +35,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
       <div class="logo"><img src="../imgs/ant_logo.png" alt="Ants R Us Logo"></div>
       <div class="pages">
         <ul class="navigation">
-          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.php">Home</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
       </div>
@@ -100,7 +74,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
      
 	  	<input type="text" id="prod_id" name="prod_id" placeholder="ID #">
 	  <label for="Quantity">Quantity</label>
-    <input type="text" id="quantity" name="quantity">
+    <input type="text" id="quantity" name="quantity" value="1">
     
     <div class="name">
       <div>
@@ -129,7 +103,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     </div>
     <div>
       <label for="state">State</label>
-      <select name="state">
+      <select id="state" name="state">
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>
@@ -185,7 +159,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     </div>
     <div>
       <label for="zipcode">Zip Code</label>
-      <input type = "text" id = "zipcode" name = "zipcode"/>
+      <input type = "text" id = "zipcode" name = "zipcode" />
     </div>
   </div>
 
@@ -236,6 +210,18 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
   </div>
   <label for="security">Security Code</label>
   <input type ="text" id="security" name = "security" placeholder="CVV"/>
+  <label for="price">Price</label>
+  <input 
+    type ="text" 
+    id="price" 
+    name="price" 
+    value=<?php echo '$'.$row['price'] ?>    
+    disabled
+    />
+  <label for="tax">Tax</label>
+  <input type ="text" id="tax" name="tax" disabled/>
+  <label for = "total">Total</label>
+  <input type ="text" id="total" name="total" disabled/>
   <input type = "submit" value = "Purchase"/>
 </form>
     </div>
