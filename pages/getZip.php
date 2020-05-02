@@ -1,6 +1,7 @@
 <?php
+	require_once "../connection.php";
+
 	$zip = $_GET["zip"];
-    $pdo = new PDO('mysql:host=localhost;dbname=test', 'root');
     $stmt = $pdo->query('SELECT z.city, z.state, t.combined_rate FROM zip_codes as z, tax_rates as t WHERE z.zip = ' . $zip.' AND z.zip = t.zip');
 	$row = $stmt->fetch(PDO::FETCH_ASSOC);
 	if($row) {

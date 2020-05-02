@@ -6,7 +6,7 @@
 	$fragment = $html->createDocumentFragment();
 	
 	// MySQL connection
-	$pdo = new PDO('mysql:host=localhost;dbname=test', 'root');
+	require_once "connection.php";
 	$stmt = $pdo->query('SELECT * FROM products');
 
 	// Dynamically push products to index.html

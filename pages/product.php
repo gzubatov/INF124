@@ -1,8 +1,37 @@
 <?php
-	$pdo = new PDO('mysql:host=localhost;dbname=test', 'root');
+	require_once "../connection.php";
+
 	$stmt = $pdo->query('SELECT * FROM products WHERE pid = ' . $_GET['pid']);
-	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+  	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+  
+  // if it's a post request, submit order form
+  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $insert_stmt = $pdo->prepare("INSERT INTO orders (pid, quantity, first_name, last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)
+					        VALUES (:pid, :quantity, :first_name, :last_name, :phone_number, :shipping_address, :zip_code, :shipping_method, :credit_card, :expiration_month, :expiration_year, :security_code, :price_total)");
+  
+    $insert_stmt->execute( array(
+      ":pid" => $_POST['prod_id'], 
+      ":quantity" => $_POST['quantity'], 
+      ":first_name" => $_POST['fname'],
+      ":last_name" => $_POST['lname'], 
+      ":phone_number" => $_POST['phonenum'], 
+      ":shipping_address" => $_POST['addr'], 
+      ":zip_code" => $_POST['zipcode'], 
+      ":shipping_method" => $_POST['shipping'],
+      ":credit_card" => $_POST['ccn'],
+      ":expiration_month" => $_POST['expmo'], 
+      ":expiration_year" => $_POST['expyr'], 
+      ":security_code" => $_POST['security'], 
+      ":price_total" => number_format(substr($_POST['total'], 1), 2)
+    ));
+
+    $prev_oid =  $pdo->lastInsertId();
+    header("Location: ./confirmation.php?oid=$prev_oid");
+  }
 ?>
+
+
+
 
 <!doctype html>
 <html lang="en">
@@ -69,7 +98,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
 
     <div id = "form">
       <h3>Order Form:</h3>
-		<form action="mailto:antsrus@mail.com" method="post" enctype="text/plain">
+		<form method="post">
       <label for = "prodid" >Product Identifier</label>
      
 	  	<input type="text" id="prod_id" name="prod_id" placeholder="ID #">
@@ -216,12 +245,12 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     id="price" 
     name="price" 
     value=<?php echo '$'.$row['price'] ?>    
-    disabled
+    readonly
     />
   <label for="tax">Tax</label>
-  <input type ="text" id="tax" name="tax" disabled/>
+  <input type ="text" id="tax" name="tax" readonly/>
   <label for = "total">Total</label>
-  <input type ="text" id="total" name="total" disabled/>
+  <input type ="text" id="total" name="total" readonly/>
   <input type = "submit" value = "Purchase"/>
 </form>
     </div>
