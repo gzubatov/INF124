@@ -11,4 +11,7 @@
 
 		echo json_encode(['city' => -1, 'state' => -1]);
 	}
+
+	$pdo = null;
+	$stmt = null;
 ?>

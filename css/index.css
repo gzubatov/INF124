@@ -182,6 +182,16 @@
 	display: none;
 }
 
+.search-container {
+	padding-top: 10px;
+	color: teal;
+	font-weight: bold;
+}
+
+.search-container input {
+	border-radius: 2px;
+}
+
 @media (max-width: 667px) {
 	#main {
 		display: grid;

@@ -28,6 +28,9 @@
     $prev_oid =  $pdo->lastInsertId();
     header("Location: ./confirmation.php?oid=$prev_oid");
   }
+  
+  $pdo = null;
+  $stmt = null;
 ?>
 
 
@@ -77,7 +80,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
       <img id="product_image" src="<?php echo '.'.$row['image'];?>" alt="Product image">
       <div>
       <h3 id="name">
-        <?php echo $row['name'];?>
+        <?php echo $row['name'];?> - $<?php echo $row['price'];?> 
       </h3>
       <h5 id="pid"><?php echo 'PID: '.$row['pid'];?></h5>
       <p id="description"><?php echo $row['description'];?></p>
@@ -258,3 +261,4 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
 
 </body>
 </html>
+

@@ -10,7 +10,10 @@
 	$stmp_shipping = $pdo->query('SELECT city, state FROM zip_codes as z WHERE z.zip = ' . $zip_code);
 	$shipping_row = $stmp_shipping->fetch(PDO::FETCH_ASSOC);
 	$city = $shipping_row['city'];
-	$state = $shipping_row['state'];
+  	$state = $shipping_row['state'];
+  
+	$pdo = null;
+	$stmt = null;
 ?>
 
 <!doctype html>
@@ -74,3 +77,4 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
 
 </body>
 </html>
+

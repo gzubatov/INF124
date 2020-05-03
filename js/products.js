@@ -1,7 +1,10 @@
 window.onload = run;
 let errors = '';
 
+let PRICE;
+
 function run() {
+	PRICE = document.querySelector('#price').value.substring(1);
 	const onFormSubmit = (event) => {
 		const identifier = document.querySelector('#prod_id').value;
 		const qty = document.querySelector('#quantity').value;
@@ -12,7 +15,7 @@ function run() {
 		const ccv = document.querySelector('#security').value;
 		const phoneNum = document.querySelector('#phonenum').value;
 		const city = document.querySelector('#city').value;
-		const zip = document.querySelector("#zipcode").value;
+		const zip = document.querySelector('#zipcode').value;
 
 		verifyIdentifier(identifier);
 		verifyQuantity(qty);
@@ -32,6 +35,7 @@ function run() {
 	form.addEventListener('submit', onFormSubmit);
 
 	document.querySelector('#zipcode').addEventListener('blur', getZip);
+	document.querySelector('#quantity').addEventListener('keyup', updatePrice);
 }
 
 /*
@@ -92,9 +96,9 @@ function verifyCreditCard(creditCardNum, ccv) {
 function getZip(event) {
 	let zipcode = event.target.value;
 
-	if (zipcode !== "" && !isNaN(zipcode)) {
+	if (zipcode !== '' && !isNaN(zipcode)) {
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function () {
+		xhr.onreadystatechange = function() {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var result = xhr.responseText;
 				const res = JSON.parse(result);
@@ -105,13 +109,31 @@ function getZip(event) {
 					document.querySelector('#tax').value = res['combined_rate'];
 					const price = document.querySelector('#price').value.substring(1);
 					const tax = 1 + parseFloat(document.querySelector('#tax').value);
-					const total = price * tax * qty;
+					const total = price * tax;
 					document.querySelector('#total').value = '$' + total.toFixed(2);
 				}
-			};
-		}
+			}
+		};
 
 		xhr.open('GET', '../pages/getZip.php?zip=' + zipcode, true);
 		xhr.send();
+	}
+}
+
+function updatePrice(event) {
+	console.log(event);
+	let quantity = event.target.value;
+	if (!isNaN(quantity) && quantity >= 0) {
+		document.querySelector('#price').value = '$' + (PRICE * quantity).toFixed(2);
+		let tax_tag = document.querySelector('#tax').value;
+		if (tax_tag !== '') {
+			//let tax = document.querySelector('#tax').value;
+			let tax = 1 + parseFloat(document.querySelector('#tax').value);
+			let total = PRICE * quantity * tax;
+			document.querySelector('#total').value = '$' + total.toFixed(2);
+		}
+	}
+	else if (quantity < 0) {
+		document.querySelector('#price').value = '$' + (0 * quantity).toFixed(2);
 	}
 }
