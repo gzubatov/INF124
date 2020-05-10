@@ -28,13 +28,14 @@
 		}
 
 	$stmt = $pdo->query('SELECT * FROM products WHERE pid = ' . $_GET['pid']);
-	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-	$status = validateForm();
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $status = validateForm();
+  
   	// if it's a post request, submit order form
   	if ($_SERVER['REQUEST_METHOD'] === 'POST' && $status) {
 		$insert_stmt = $pdo->prepare("INSERT INTO orders (pid, quantity, first_name, last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)
 								VALUES (:pid, :quantity, :first_name, :last_name, :phone_number, :shipping_address, :zip_code, :shipping_method, :credit_card, :expiration_month, :expiration_year, :security_code, :price_total)");
-			
+
 			$insert_stmt->execute( array(
 			":pid" => $_POST['prod_id'], 
 			":quantity" => $_POST['quantity'], 
@@ -48,11 +49,12 @@
 			":expiration_month" => $_POST['expmo'], 
 			":expiration_year" => $_POST['expyr'], 
 			":security_code" => $_POST['security'], 
-			":price_total" => number_format(substr($_POST['total'], 1), 2)
+			":price_total" => floatval(substr($_POST['total'], 1))
 			));
 
-			$prev_oid = $pdo->lastInsertId();
-			header("Location: ./confirmation.php?oid=$prev_oid");
+      
+      $prev_oid = $pdo->lastInsertId();
+      header("Location: ./confirmation.php?oid=$prev_oid");
 	  }	
 	  else if( $_SERVER['REQUEST_METHOD'] === 'POST' && $status == FALSE) {
 		?>
