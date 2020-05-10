@@ -50,8 +50,7 @@ function verifyIdentifier(identifier) {
 function verifyQuantity(qty) {
 	if (qty.length === 0) {
 		errors += 'Must enter a quantity\n';
-	}
-	else if (isNaN(qty) || parseInt(qty) <= 0) {
+	} else if (isNaN(qty) || parseInt(qty) <= 0) {
 		errors += 'Cannot enter Quantity Value below 1\n';
 	}
 }
@@ -98,7 +97,7 @@ function getZip(event) {
 
 	if (zipcode !== '' && !isNaN(zipcode)) {
 		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
+		xhr.onreadystatechange = function () {
 			if (xhr.readyState == 4 && xhr.status == 200) {
 				var result = xhr.responseText;
 				const res = JSON.parse(result);
@@ -132,8 +131,7 @@ function updatePrice(event) {
 			let total = PRICE * quantity * tax;
 			document.querySelector('#total').value = '$' + total.toFixed(2);
 		}
-	}
-	else if (quantity < 0) {
+	} else if (quantity < 0) {
 		document.querySelector('#price').value = '$' + (0 * quantity).toFixed(2);
 	}
 }

@@ -1,40 +1,72 @@
 <?php
 	require_once "../connection.php";
 
+	// Close and open PHP tage to modify CSS for error
+	?>
+	<style type="text/css">
+	#errorBlock {
+		display: none;
+	}
+	</style>
+	<?php
+
+	// Validate form again on server side
+	function validateForm(){
+		if( !isset($_POST['prod_id']) || !is_numeric( $_POST['prod_id']) ) { return False; }
+		if( !isset($_POST['quantity']) || !is_numeric($_POST['quantity']) && $_POST['quantity'] <= 0 ) { return False; }
+		if( !isset($_POST['fname']) || !isset($_POST['lname']) ){ return False; }
+		if( !isset($_POST['phonenum']) || preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $_POST['phonenum'])) { return False; }
+		if( !isset($_POST['addr'])) { return False; }
+    	if( !isset($_POST['zipcode']) || !is_numeric($_POST['zipcode']) &&  strlen( strval($_POST['zipcode'])) != 5 ) { return False; }
+		if( !isset($_POST['shipping']) ) { return False; }
+		if( !isset($_POST['ccn']) || !is_numeric($_POST['ccn']) || strlen(strval($_POST['ccn'])) != 16) { return False; }
+		if( !isset($_POST['expmo']) || !is_numeric($_POST['expmo']) ) { return False; }
+		if( !isset($_POST['expyr']) || !is_numeric($_POST['expyr'])) { return False; }
+		if( !isset($_POST['security']) || strlen(strval($_POST['security'])) != 3 ) { return False; }
+		if( !isset($_POST['total'])) { return False; } 
+		return True;
+		}
+
 	$stmt = $pdo->query('SELECT * FROM products WHERE pid = ' . $_GET['pid']);
-  	$row = $stmt->fetch(PDO::FETCH_ASSOC);
-  
-  // if it's a post request, submit order form
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $insert_stmt = $pdo->prepare("INSERT INTO orders (pid, quantity, first_name, last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)
-					        VALUES (:pid, :quantity, :first_name, :last_name, :phone_number, :shipping_address, :zip_code, :shipping_method, :credit_card, :expiration_month, :expiration_year, :security_code, :price_total)");
-  
-    $insert_stmt->execute( array(
-      ":pid" => $_POST['prod_id'], 
-      ":quantity" => $_POST['quantity'], 
-      ":first_name" => $_POST['fname'],
-      ":last_name" => $_POST['lname'], 
-      ":phone_number" => $_POST['phonenum'], 
-      ":shipping_address" => $_POST['addr'], 
-      ":zip_code" => $_POST['zipcode'], 
-      ":shipping_method" => $_POST['shipping'],
-      ":credit_card" => $_POST['ccn'],
-      ":expiration_month" => $_POST['expmo'], 
-      ":expiration_year" => $_POST['expyr'], 
-      ":security_code" => $_POST['security'], 
-      ":price_total" => number_format(substr($_POST['total'], 1), 2)
-    ));
+	$row = $stmt->fetch(PDO::FETCH_ASSOC);
+	$status = validateForm();
+  	// if it's a post request, submit order form
+  	if ($_SERVER['REQUEST_METHOD'] === 'POST' && $status) {
+		$insert_stmt = $pdo->prepare("INSERT INTO orders (pid, quantity, first_name, last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)
+								VALUES (:pid, :quantity, :first_name, :last_name, :phone_number, :shipping_address, :zip_code, :shipping_method, :credit_card, :expiration_month, :expiration_year, :security_code, :price_total)");
+			
+			$insert_stmt->execute( array(
+			":pid" => $_POST['prod_id'], 
+			":quantity" => $_POST['quantity'], 
+			":first_name" => $_POST['fname'],
+			":last_name" => $_POST['lname'], 
+			":phone_number" => $_POST['phonenum'], 
+			":shipping_address" => $_POST['addr'], 
+			":zip_code" => $_POST['zipcode'], 
+			":shipping_method" => $_POST['shipping'],
+			":credit_card" => $_POST['ccn'],
+			":expiration_month" => $_POST['expmo'], 
+			":expiration_year" => $_POST['expyr'], 
+			":security_code" => $_POST['security'], 
+			":price_total" => number_format(substr($_POST['total'], 1), 2)
+			));
 
-    $prev_oid =  $pdo->lastInsertId();
-    header("Location: ./confirmation.php?oid=$prev_oid");
-  }
-  
-  $pdo = null;
-  $stmt = null;
+			$prev_oid = $pdo->lastInsertId();
+			header("Location: ./confirmation.php?oid=$prev_oid");
+	  }	
+	  else if( $_SERVER['REQUEST_METHOD'] === 'POST' && $status == FALSE) {
+		?>
+		<style type="text/css">
+		#errorBlock {
+			display: block;
+		}
+		</style>
+		<?php
+	  }
+
+	$pdo = null;
+	$stmt = null;
 ?>
-
-
-
 
 <!doctype html>
 <html lang="en">
@@ -100,6 +132,11 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     </div>
 
     <div id = "form">
+
+	<div id="errorBlock">
+			<h1 style="color: red">Error processing your request</h1>
+	</div>
+
       <h3>Order Form:</h3>
 		<form method="post">
       <label for = "prodid" >Product Identifier</label>

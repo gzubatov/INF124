@@ -14,13 +14,17 @@ REVISED DB PASSWORD = 'mytest'
    which then queries all the products in our 'products' table. The php file parses the query result, and generates echoed HTML code. 
 
 
-2. Our products.js file continues to validate the user's input into text fields. Once JavaScript 
-   validates a user's input, prepared statements in product.php are used to protect from SQL Injections. All information put into these fields are stored in our orders table. This same submitted order is queried in our table when we load the confirmation page (confirmation.php) based on an order id that was assigned by our MySQL databse.
+2. Our products.js file continues to validate the user's input into text fields. Once    
+   JavaScript validates a user's input, prepared statements in product.php are used to protect from SQL Injections. All information put into these fields are stored in our orders table. This same submitted order is queried in our table when we load the confirmation page (confirmation.php) based on an order id that was assigned by our MySQL databse.
+
+   We also validate the form on the server side. In product.php we have a function
+   validateForm which will be called to validate the fields before committing to our
+   database. If this fails, we present an error message to the user of a processing
+   request and we do not submit any data to the database.
 
 
-3. After successful insertion into the 'orders' table, the user is redirected to confirmation.php
-   where they will be shown a confirmation that their order went through and they will see all
-   of their order details.
+3. After successful insertion into the 'orders' table, the user is redirected to 	
+   confirmation. php where they will be shown a confirmation that their order went through and they will see all of their order details.
 
 
 4. Uses of Ajax:
