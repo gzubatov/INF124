@@ -1,7 +1,7 @@
 # INF124
 Repo for our UCI IN4MATX 124 group project.
 
-URL: http://circinus-4.ics.uci.edu:8081/
+URL: http://circinus-4.ics.uci.edu:8081/index.php
 
 Name:	        Email:			   ID:
 Greg Zubatov    gzubatov@uci.edu   57854629
