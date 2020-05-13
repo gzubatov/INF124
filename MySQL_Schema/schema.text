@@ -1,0 +1,25 @@
+name, price, description, image source, details
+pid, name, price, description, image source
+1, Mini Cactus, 7.99, "
+
+12,Red Yarn,9.99,
+
+categories
+c.id      name                 
+  1       floral                        
+  2       home-office                         
+  3       knitting                               
+
+
+map
+cid pid     
+ 1  1    
+ 2  1     
+         
+Primary key(cid, pid)
+
+SELECT c.name from product as p, categories as c, map as m where p.pid = c.pid AND m.cid = c.cid
+
+
+CREATE TABLE `test`.`orders` ( `oid` INT NOT NULL AUTO_INCREMENT , `pid` INT NOT NULL , `quantity` INT NOT NULL , `first_name` TEXT NOT NULL , `last_name` TEXT NOT NULL , `phone_number` TEXT NOT NULL , `shipping_address` TEXT NOT NULL , `zip_code` BIGINT NOT NULL , `shipping_method` TEXT NOT NULL , `credit_card` BIGINT UNSIGNED NOT NULL , `expiration_month` INT NOT NULL , `expiration_year` INT NOT NULL , `security_code` INT NOT NULL , `price_total` DOUBLE(5,2) NOT NULL , PRIMARY KEY (`oid`)) ENGINE = InnoDB;
+cop

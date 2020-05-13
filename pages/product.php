@@ -1,5 +1,77 @@
+<?php
+	require_once "../connection.php";
+
+	// Close and open PHP tage to modify CSS for error
+	?>
+	<style type="text/css">
+	#errorBlock {
+		display: none;
+	}
+	</style>
+	<?php
+
+	// Validate form again on server side
+	function validateForm(){
+		if( !isset($_POST['prod_id']) || !is_numeric( $_POST['prod_id']) ) { return False; }
+		if( !isset($_POST['quantity']) || !is_numeric($_POST['quantity']) && $_POST['quantity'] <= 0 ) { return False; }
+		if( !isset($_POST['fname']) || !isset($_POST['lname']) ){ return False; }
+		if( !isset($_POST['phonenum']) || preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $_POST['phonenum'])) { return False; }
+		if( !isset($_POST['addr'])) { return False; }
+    	if( !isset($_POST['zipcode']) || !is_numeric($_POST['zipcode']) &&  strlen( strval($_POST['zipcode'])) != 5 ) { return False; }
+		if( !isset($_POST['shipping']) ) { return False; }
+		if( !isset($_POST['ccn']) || !is_numeric($_POST['ccn']) || strlen(strval($_POST['ccn'])) != 16) { return False; }
+		if( !isset($_POST['expmo']) || !is_numeric($_POST['expmo']) ) { return False; }
+		if( !isset($_POST['expyr']) || !is_numeric($_POST['expyr'])) { return False; }
+		if( !isset($_POST['security']) || strlen(strval($_POST['security'])) != 3 ) { return False; }
+		if( !isset($_POST['total'])) { return False; } 
+		return True;
+		}
+
+	$stmt = $pdo->query('SELECT * FROM products WHERE pid = ' . $_GET['pid']);
+  $row = $stmt->fetch(PDO::FETCH_ASSOC);
+  $status = validateForm();
+  
+  	// if it's a post request, submit order form
+  	if ($_SERVER['REQUEST_METHOD'] === 'POST' && $status) {
+		$insert_stmt = $pdo->prepare("INSERT INTO orders (pid, quantity, first_name, last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)
+								VALUES (:pid, :quantity, :first_name, :last_name, :phone_number, :shipping_address, :zip_code, :shipping_method, :credit_card, :expiration_month, :expiration_year, :security_code, :price_total)");
+
+			$insert_stmt->execute( array(
+			":pid" => $_POST['prod_id'], 
+			":quantity" => $_POST['quantity'], 
+			":first_name" => $_POST['fname'],
+			":last_name" => $_POST['lname'], 
+			":phone_number" => $_POST['phonenum'], 
+			":shipping_address" => $_POST['addr'], 
+			":zip_code" => $_POST['zipcode'], 
+			":shipping_method" => $_POST['shipping'],
+			":credit_card" => $_POST['ccn'],
+			":expiration_month" => $_POST['expmo'], 
+			":expiration_year" => $_POST['expyr'], 
+			":security_code" => $_POST['security'], 
+			":price_total" => floatval(substr($_POST['total'], 1))
+			));
+
+      
+      $prev_oid = $pdo->lastInsertId();
+      header("Location: ./confirmation.php?oid=$prev_oid");
+	  }	
+	  else if( $_SERVER['REQUEST_METHOD'] === 'POST' && $status == FALSE) {
+		?>
+		<style type="text/css">
+		#errorBlock {
+			display: block;
+		}
+		</style>
+		<?php
+	  }
+
+	$pdo = null;
+	$stmt = null;
+?>
+
 <!doctype html>
-<d lang="en">
+<html lang="en">
 
 <!--
 WRITTEN BY: Greg Zubatov, Swan Toma, Genesis Garcia 
@@ -14,7 +86,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
   
   <link rel="stylesheet" href="../css/global.css">
   <link rel="stylesheet" href="../css/products.css">
-  <script src="../js/products.js"></script>
+  <script src="./../js/products.js"></script>
   
 
   
@@ -29,7 +101,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
       <div class="logo"><img src="../imgs/ant_logo.png" alt="Ants R Us Logo"></div>
       <div class="pages">
         <ul class="navigation">
-          <li><a href="../index.html">Home</a></li>
+          <li><a href="../index.php">Home</a></li>
           <li><a href="about.html">About</a></li>
         </ul>
       </div>
@@ -39,33 +111,42 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     
   <div id="main">
     <div id = "info">
-      <img src="../imgs/products/organizer_cube_drawer.jpg" alt="Product image">
+      <img id="product_image" src="<?php echo '.'.$row['image'];?>" alt="Product image">
       <div>
-        <h3>Organizer Cube Drawer - $12.99</h3>
-        <h5>ID: p7</h5>
-        <p>A nicely styled design drawer with practical features.
-          <br>Rounded corners that give a smooth edge and contains
-          <br> easy to open drawers.
-        </p>
-        <p>Details:
+      <h3 id="name">
+        <?php echo $row['name'];?> - $<?php echo $row['price'];?> 
+      </h3>
+      <h5 id="pid"><?php echo 'PID: '.$row['pid'];?></h5>
+      <p id="description"><?php echo $row['description'];?></p>
+      <p id="details">
+        Details:
           <ul>
-            <li>Inner Dimensions: 10.75"L x 12.25"W x 12.25"H</li>
-            <li>Weight tolerance: 24 lbs. For single unit, 6 lbs. Each drawer, 11 lbs. Top.</li>
-          </ul>
-        </p>
-      </div>
+            <?php 
+              $details = explode(',', $row['details']);
+              foreach ($details as $detail) {
+                echo "<li> $detail</li>";
+              }
+            ?>
+          <ul>
+        </p>  
     </div>
+    
+    </div>
+
     <div id = "form">
+
+	<div id="errorBlock">
+			<h1 style="color: red">Error processing your request</h1>
+	</div>
+
       <h3>Order Form:</h3>
-		<form action="mailto:antsrus@mail.com" method="post" enctype="text/plain">
+		<form method="post">
       <label for = "prodid" >Product Identifier</label>
      
 	  	<input type="text" id="prod_id" name="prod_id" placeholder="ID #">
 	  <label for="Quantity">Quantity</label>
-    <input type="text" id="quantity" name="quantity">
-       
-	
-		
+    <input type="text" id="quantity" name="quantity" value="1">
+    
     <div class="name">
       <div>
         <label for="fname">First name</label>
@@ -78,9 +159,10 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
   </div>
   
   <div class="phone">
-    <label for="phonenum">Phone Number</label>
-    <input placeholder="123-456-7890" type="tel" id="phonenum" name="phonenum" pattern="[0-9]{3}[-][0-9]{3}[-][0-9]{4}" title="Format: 123-456-7891">
-  </div>
+  <label for="phonenum">Phone Number</label>
+  <input placeholder="123-456-7890" type="tel" id="phonenum" name="phonenum" pattern="[0-9]{3}[-][0-9]{3}[-][0-9]{4}" title = "Format: 123-456-7891">
+
+</div>
   
   <label for="addr">Shipping Address</label>
   <input type="text" id="addr" name="addr">
@@ -92,7 +174,7 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     </div>
     <div>
       <label for="state">State</label>
-      <select name="state">
+      <select id="state" name="state">
         <option value="AL">AL</option>
         <option value="AK">AK</option>
         <option value="AZ">AZ</option>
@@ -148,11 +230,10 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
     </div>
     <div>
       <label for="zipcode">Zip Code</label>
-      <input type = "text" id = "zipcode" name = "zipcode"/>
+      <input type = "text" id = "zipcode" name = "zipcode" />
     </div>
   </div>
 
-  
   <label for="shipping">Shipping Method</label>
   
   <select id="shipping" name="shipping">
@@ -200,10 +281,23 @@ EMAIL: gzubatov@uci.edu, sktoma@uci.edu, genesirg@uci.edu
   </div>
   <label for="security">Security Code</label>
   <input type ="text" id="security" name = "security" placeholder="CVV"/>
+  <label for="price">Price</label>
+  <input 
+    type ="text" 
+    id="price" 
+    name="price" 
+    value=<?php echo '$'.$row['price'] ?>    
+    readonly
+    />
+  <label for="tax">Tax</label>
+  <input type ="text" id="tax" name="tax" readonly/>
+  <label for = "total">Total</label>
+  <input type ="text" id="total" name="total" readonly/>
   <input type = "submit" value = "Purchase"/>
 </form>
-    </option>
-  </option>
+    </div>
+  </div>
 
 </body>
-</d>
+</html>
+
