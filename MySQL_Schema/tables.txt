@@ -1,8 +1,7 @@
-categories	CREATE TABLE `categories` (
-  `cid` int(11) NOT NULL AUTO_INCREMENT,
+CREATE TABLE `categories` (`cid` int(11) NOT NULL AUTO_INCREMENT,
   `category` text NOT NULL,
   PRIMARY KEY (`cid`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4	
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4;	
 
 CREATE TABLE `orders` (`oid` int(11) NOT NULL AUTO_INCREMENT,
  `pid` int(11) NOT NULL,

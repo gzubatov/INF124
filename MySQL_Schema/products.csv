@@ -38,3 +38,11 @@ VALUES
 	(10, 4), (10, 3), (10, 5),
 	(11, 2), (11, 3),
 	(12, 4), (12, 3), (12, 5)
+
+
+LOAD DATA LOCAL INFILE '/usr/local/mysql/data/tax_rates.csv' 
+INTO TABLE tax_rates 
+FIELDS TERMINATED BY ',' 
+ENCLOSED BY '"' 
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
