@@ -3,6 +3,7 @@ let errors = '';
 
 let PRICE;
 
+
 function run() {
 	PRICE = document.querySelector('#price').value.substring(1);
 	const onFormSubmit = (event) => {

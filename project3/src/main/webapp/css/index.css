@@ -149,7 +149,6 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-
 	text-align: center;
 	align-content: center;
 	max-width: 1100px;
@@ -201,4 +200,33 @@
 	.jumbotron h1 {
 		font-size: 75px;
 	}
+}
+
+.history {
+	display: flex;
+        flex-wrap: wrap;
+}
+
+#history {
+    margin-left: 260px;
+}
+
+.product_history {
+	box-shadow: 10px 10px 16px -10px rgba(220, 220, 220, 0.75);
+	margin: 10px;
+	background-color: rgba(128, 255, 212, 0.4);
+	color: black;
+	transition: 500ms;
+        max-width: 200px;
+        text-align: center;
+}
+
+.product_history img {
+    	max-height: 200px;
+        max-width: 200px;
+}
+
+.history a {
+    text-decoration: none;
+    color: black;
 }
