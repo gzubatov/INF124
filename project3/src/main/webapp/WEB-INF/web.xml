@@ -16,9 +16,21 @@
         <servlet-name>History</servlet-name>
         <servlet-class>History</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Checkout</servlet-name>
+        <servlet-class>Checkout</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetZipCode</servlet-name>
+        <servlet-class>GetZipCode</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
         <url-pattern>/index.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Index</servlet-name>
+        <url-pattern>/Index</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Product</servlet-name>
@@ -31,6 +43,14 @@
     <servlet-mapping>
         <servlet-name>History</servlet-name>
         <url-pattern>/History</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Checkout</servlet-name>
+        <url-pattern>/Checkout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetZipCode</servlet-name>
+        <url-pattern>/GetZipCode</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,18 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -21,7 +19,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author swantoma
+ * @author Greg Zubatov gzubatov@uci.edu
+ * @author Genesis Garcia genesirg@uci.edu
+ * @author Swan Toma sktoma@uci.edu
  */
 public class Product extends HttpServlet {
 
@@ -35,12 +35,12 @@ public class Product extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {  
-        
+            throws ServletException, IOException, SQLException {
+        Statement statement = null;
         try {
             PrintWriter out = response.getWriter();
             String log = "";
-
+            
             try {
                 String dbDriver = "com.mysql.cj.jdbc.Driver";
                 Class.forName(dbDriver);
@@ -56,9 +56,10 @@ public class Product extends HttpServlet {
             properties.setProperty("user", "swantoma");
             properties.setProperty("password", "tmp123!");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
-            Statement statement = con.createStatement();
+            statement = con.createStatement();
             ResultSet productRSet = statement.executeQuery("SELECT * FROM products WHERE pid = " + request.getParameter("pid") + ";");
 
+            
             productRSet.next();
             int pid = productRSet.getInt("pid");
             double price = productRSet.getDouble("price");
@@ -67,12 +68,12 @@ public class Product extends HttpServlet {
             String details = productRSet.getString("details");
             String image = productRSet.getString("image");
             String[] detailsSplit = details.split(",");
-            
-            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());          
-            Cookie cookie = new Cookie( timeStamp, Integer.toString(pid));
-            cookie.setMaxAge(60*60*24); // 1 day
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+            Cookie cookie = new Cookie(timeStamp, Integer.toString(pid));
+            cookie.setMaxAge(60 * 60 * 24); // 1 day
             response.addCookie(cookie);
-            response.setContentType("text/html;charset=UTF-8");   
+            response.setContentType("text/html;charset=UTF-8");           
 
             out.println("<!doctype html>");
             out.println("<html lang=\"en\">");
@@ -90,7 +91,7 @@ public class Product extends HttpServlet {
             out.println("");
             out.println("<link rel=\"stylesheet\" href=\"./css/global.css\">");
             out.println("<link rel=\"stylesheet\" href=\"./css/products.css\">");
-            out.println("<script src=\"./js/products.js\"></script>");
+            //out.println("<script src=\"./js/products.js\"></script>");
             out.println("");
             out.println("");
             out.println("");
@@ -118,8 +119,10 @@ public class Product extends HttpServlet {
             out.println("<img id=\"product_image\" src=\"" + image + "\" alt=\"Product image\">");
             out.println("<div>");
             out.println("<h3 id=\"name\">" + name + " - $" + price + " </h3>");
-            out.println("<form method = \"post\" action = \"/Cart\">");
+            out.println("<form method = \"post\" action = \"/project3/Cart\">");
+            out.println("<input type = \"text\" name =\"pid\" value=\"" + pid + "\" hidden>");
             out.println("<input type = \"submit\" name =\"cart\" value=\"Add To Cart\">");
+            out.println("");
             out.print("</form>");
             out.println("<h5 id=\"pid\">pid: " + pid + "</h5>");
             out.println("<p id=\"description\">" + description + "</p>");
@@ -136,13 +139,18 @@ public class Product extends HttpServlet {
             out.println("</div>");
             out.println("");
             out.println("</div>");
-            out.println("");            
+            out.println("");
             out.println("</body>");
             out.println("");
-            
             out.println("</html>");
+            
+            con.close();
         } catch (Exception e) {
             ;
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
         }
     }
 
@@ -158,7 +166,11 @@ public class Product extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -172,7 +184,11 @@ public class Product extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Product.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

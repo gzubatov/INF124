@@ -1,6 +1,8 @@
 Product.class
 Index.class
+GetZipCode.class
 com/mycompany/project3/resources/JavaEE8Resource.class
 History.class
 com/mycompany/project3/JAXRSConfiguration.class
+Checkout.class
 Cart.class

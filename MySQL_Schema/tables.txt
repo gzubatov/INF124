@@ -1,3 +1,8 @@
+CREATE table `products_in_orders` (`oid` int(11) NOT NULL,
+`pid` int(11) NOT NULL,
+PRIMARY KEY(`oid`, `pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 CREATE TABLE `categories` (`cid` int(11) NOT NULL AUTO_INCREMENT,
   `category` text NOT NULL,
   PRIMARY KEY (`cid`)

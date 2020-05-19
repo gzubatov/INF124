@@ -22,9 +22,6 @@ const categories = {
 };
 
 let activeFilters = [];
-console.log(categories);
-console.log(products);
-console.log(filters);
 
 filters.forEach((filter, index) => {
 	filter.addEventListener('click', () => {
@@ -35,8 +32,7 @@ filters.forEach((filter, index) => {
 		else if (!filter.checked && activeFilters.includes(filter)) {
 			activeFilters = activeFilters.filter((f) => f !== filter);
 		}
-		console.log(activeFilters);
-
+                
 		products.forEach((product) => {
 			// flag = false
 			// loop over activeFilters

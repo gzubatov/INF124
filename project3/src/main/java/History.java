@@ -1,16 +1,20 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -19,7 +23,9 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author swantoma
+ * @author Greg Zubatov gzubatov@uci.edu
+ * @author Genesis Garcia genesirg@uci.edu
+ * @author Swan Toma sktoma@uci.edu
  */
 public class History extends HttpServlet {
 
@@ -33,11 +39,12 @@ public class History extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
+        String log = "";
+        Statement statement = null;
         try {
             PrintWriter out = response.getWriter();
-            String log = "";
 
             try {
                 String dbDriver = "com.mysql.cj.jdbc.Driver";
@@ -54,7 +61,7 @@ public class History extends HttpServlet {
             properties.setProperty("user", "swantoma");
             properties.setProperty("password", "tmp123!");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
-            Statement statement = con.createStatement();
+            statement = con.createStatement();
             ResultSet productRSet;
 
             Cookie[] cookies = request.getCookies();
@@ -62,21 +69,38 @@ public class History extends HttpServlet {
             out.println("<h1>History</h1>");
             out.println("<div class=\"history\">");
 
+            List<Cookie> list = Arrays.asList(cookies);
+            Collections.reverse(list);
+            Set<String> pids = new HashSet<String>();
+
+            int count = 0;
             if (cookies != null) {
-                for (Cookie cookie : cookies) {
-                    productRSet = statement.executeQuery("SELECT * FROM products WHERE pid = " + cookie.getValue() + ";");
-                    productRSet.next();
-                    out.println("<a href=http://localhost:8080/project3/Product?pid=" + productRSet.getInt("pid") + ">");
-                    out.println("<div class=\"product_history\" id = " + productRSet.getInt("pid") + ">");
-                    out.println("<img src='" + productRSet.getString("image") + "'/>");
-                    out.println("<div><p>" + productRSet.getString("name") + "</p><p>" + productRSet.getDouble("price") + "</p></div></div>");
-                    out.println("</a>");
+                for (Cookie cookie : list) {
+                    if (!pids.contains(cookie.getValue())) {
+                        ++count;
+                        pids.add(cookie.getValue());
+                        productRSet = statement.executeQuery("SELECT * FROM products WHERE pid = " + cookie.getValue() + ";");
+                        productRSet.next();
+                        out.println("<a href=http://localhost:8080/project3/Product?pid=" + productRSet.getInt("pid") + ">");
+                        out.println("<div class=\"product_history\" id = " + productRSet.getInt("pid") + ">");
+                        out.println("<img src='" + productRSet.getString("image") + "'/>");
+                        out.println("<div><p>" + productRSet.getString("name") + "</p><p>" + productRSet.getDouble("price") + "</p></div></div>");
+                        out.println("</a>");
+                    }
+                    if (count == 5) {
+                        break;
+                    }
                 }
+                con.close();
             }
             out.println("</div>");
             out.println("</div>");
-
         } catch (Exception e) {
+            ;
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
         }
     }
 
@@ -92,7 +116,11 @@ public class History extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(History.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -106,7 +134,11 @@ public class History extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(History.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**

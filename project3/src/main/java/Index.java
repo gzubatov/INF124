@@ -1,22 +1,22 @@
-/*
- * This servlet is mapped to index.html through web.xml.
- * This servlet will respond with the home page content including data 
- * pulled from MySQL database.
- */
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -36,7 +36,7 @@ public class Index extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         String log = "";
 
@@ -47,7 +47,8 @@ public class Index extends HttpServlet {
             log += "<h2>Driver connection error</h2>";
             log += "<h2>" + e.toString() + "</h2>";
         }
-
+        Connection con;
+        Statement statement = null;
         try {
             Properties properties = new Properties();
             properties.setProperty("useSSL", "false");
@@ -55,14 +56,20 @@ public class Index extends HttpServlet {
             properties.setProperty("serverTimezone", "UTC");
             properties.setProperty("user", "swantoma");
             properties.setProperty("password", "tmp123!");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
-            Statement statement = con.createStatement();
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
+            statement = con.createStatement();
             ResultSet productRSet = statement.executeQuery("SELECT * FROM products;");
             // Create second statement for category query below, need two connection statements here
             statement = con.createStatement();
             PrintWriter out = response.getWriter();
-
             Cookie[] cookies = request.getCookies();
+
+            HttpSession session = request.getSession(true);
+            if (session.getAttribute("cart") == null) {
+                session.setAttribute("cart", new ArrayList<String>());
+            }
+            ArrayList<String> pids = (ArrayList<String>) session.getAttribute("cart");
+            int cartSize = pids.size();
 
             out.println(log);
             out.println("<!DOCTYPE html>");
@@ -97,6 +104,7 @@ public class Index extends HttpServlet {
             out.println("<ul class=\"navigation\">");
             out.println("<li><a href=\"index.html\">Home</a></li>");
             out.println("<li><a href=\"./pages/about.html\">About</a></li>");
+            out.println("<li>Cart(" + cartSize + ")</li>");
             out.println("</ul>");
             out.println("</div>");
             out.println("</div>");
@@ -170,10 +178,15 @@ public class Index extends HttpServlet {
             out.println("</body>");
             out.println("");
             out.println("</html>");
-
+            
+            con.close();
         } catch (Exception e) {
             //log += "<h2>Database connection error</h2>";
             log += "<h2>" + e.toString() + "</h2>";
+        } finally {
+            if (statement != null) {
+                statement.close();
+            }
         }
     }
 
@@ -191,7 +204,11 @@ public class Index extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(History.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -205,7 +222,11 @@ public class Index extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(History.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
