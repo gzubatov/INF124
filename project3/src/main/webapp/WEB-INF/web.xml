@@ -24,6 +24,10 @@
         <servlet-name>GetZipCode</servlet-name>
         <servlet-class>GetZipCode</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Confirmation</servlet-name>
+        <servlet-class>Confirmation</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Index</servlet-name>
         <url-pattern>/index.html</url-pattern>
@@ -51,6 +55,10 @@
     <servlet-mapping>
         <servlet-name>GetZipCode</servlet-name>
         <url-pattern>/GetZipCode</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Confirmation</servlet-name>
+        <url-pattern>/Confirmation</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1,5 +1,6 @@
 CREATE table `products_in_orders` (`oid` int(11) NOT NULL,
 `pid` int(11) NOT NULL,
+`quantity` int(11) NOT NUll,
 PRIMARY KEY(`oid`, `pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

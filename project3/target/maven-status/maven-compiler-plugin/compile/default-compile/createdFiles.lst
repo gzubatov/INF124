@@ -1,6 +1,7 @@
 Product.class
 Index.class
 GetZipCode.class
+Confirmation.class
 com/mycompany/project3/resources/JavaEE8Resource.class
 History.class
 com/mycompany/project3/JAXRSConfiguration.class
