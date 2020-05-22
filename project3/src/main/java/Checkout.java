@@ -14,12 +14,17 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.RequestDispatcher;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -311,94 +316,100 @@ public class Checkout extends HttpServlet {
 		try (PrintWriter out = response.getWriter()) {
 			// response.setContentType("text/html;charset=UTF-8");
 
-			HttpSession session = request.getSession(true);
-			ArrayList<String> pids = (ArrayList<String>) session.getAttribute("cart");
-			Properties properties = new Properties();
-			properties.setProperty("useSSL", "false");
-			properties.setProperty("allowPublicKeyRetrieval", "true");
-			properties.setProperty("serverTimezone", "UTC");
-			properties.setProperty("user", "swantoma");
-			properties.setProperty("password", "tmp123!");
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
+			if (validateForm(request) == false) {
+				out.println("<script>alert(\"Database processing error\")</script>");
+				processRequest(request, response);
+			} else {
 
-			String firstName = request.getParameter("lname");
-			String lastName = request.getParameter("fname");
-			String phoneNumber = request.getParameter("phonenum");
-			String shippingAddress = request.getParameter("addr");
-			String zip = request.getParameter("zipcode");
-			String shipping = request.getParameter("shipping");
-			String ccn = request.getParameter("ccn");
-			String expmo = request.getParameter("expmo");
-			String expyr = request.getParameter("expyr");
-			String security = request.getParameter("security");
-			String total = request.getParameter("total");
-			total = total.substring(1);
+				HttpSession session = request.getSession(true);
+				ArrayList<String> pids = (ArrayList<String>) session.getAttribute("cart");
+				Properties properties = new Properties();
+				properties.setProperty("useSSL", "false");
+				properties.setProperty("allowPublicKeyRetrieval", "true");
+				properties.setProperty("serverTimezone", "UTC");
+				properties.setProperty("user", "swantoma");
+				properties.setProperty("password", "tmp123!");
+				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts", properties);
 
-			String query = "INSERT INTO orders (first_name, "
-					+ "last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)"
-					+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-			st.setString(1, firstName);
-			st.setString(2, lastName);
-			st.setString(3, phoneNumber);
-			st.setString(4, shippingAddress);
-			st.setInt(5, Integer.valueOf(zip));
-			st.setString(6, shipping);
-			st.setLong(7, Long.valueOf(ccn));
-			st.setInt(8, Integer.valueOf(expmo));
-			st.setInt(9, Integer.valueOf(expyr));
-			st.setInt(10, Integer.valueOf(security));
-			st.setDouble(11, Double.valueOf(total));
-			int numAffectedRows = st.executeUpdate();
-			int oid;
+				String firstName = request.getParameter("lname");
+				String lastName = request.getParameter("fname");
+				String phoneNumber = request.getParameter("phonenum");
+				String shippingAddress = request.getParameter("addr");
+				String zip = request.getParameter("zipcode");
+				String shipping = request.getParameter("shipping");
+				String ccn = request.getParameter("ccn");
+				String expmo = request.getParameter("expmo");
+				String expyr = request.getParameter("expyr");
+				String security = request.getParameter("security");
+				String total = request.getParameter("total");
+				total = total.substring(1);
 
-			if (numAffectedRows == 0) {
-				throw new SQLException("Inserting into products_in_orders failed");
-			}
+				String query = "INSERT INTO orders (first_name, "
+						+ "last_name, phone_number, shipping_address, zip_code, shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total)"
+						+ "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				PreparedStatement st = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				st.setString(1, firstName);
+				st.setString(2, lastName);
+				st.setString(3, phoneNumber);
+				st.setString(4, shippingAddress);
+				st.setInt(5, Integer.valueOf(zip));
+				st.setString(6, shipping);
+				st.setLong(7, Long.valueOf(ccn));
+				st.setInt(8, Integer.valueOf(expmo));
+				st.setInt(9, Integer.valueOf(expyr));
+				st.setInt(10, Integer.valueOf(security));
+				st.setDouble(11, Double.valueOf(total));
+				int numAffectedRows = st.executeUpdate();
+				int oid;
 
-			try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-				if (generatedKeys.next()) {
-					oid = generatedKeys.getInt(1);
-				} else {
-					throw new SQLException("Inserting into products_in_orders failed, no ID obtained.");
+				if (numAffectedRows == 0) {
+					throw new SQLException("Inserting into products_in_orders failed");
 				}
-			}
 
-			// hash table to store qty
-			Hashtable<String, Integer> productQty = new Hashtable<String, Integer>();
-			for (String pid : pids) {
-				// productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
-				if (productQty.containsKey(pid)) {
-					productQty.put(pid, productQty.get(pid) + 1);
-				} else {
-					productQty.put(pid, 1);
+				try (ResultSet generatedKeys = st.getGeneratedKeys()) {
+					if (generatedKeys.next()) {
+						oid = generatedKeys.getInt(1);
+					} else {
+						throw new SQLException("Inserting into products_in_orders failed, no ID obtained.");
+					}
 				}
-			}
-			PreparedStatement pio_statement = null;
-			Set<String> keys = productQty.keySet();
-			con.setAutoCommit(false);
-			String products_in_orders_query = "INSERT INTO products_in_orders (oid, pid, quantity) "
-					+ "VALUES(?, ?, ?)";
 
-			pio_statement = con.prepareStatement(products_in_orders_query);
-			for (String key : keys) {
-				out.println("<h1>" + key + "," + productQty.get(key) + "</h1>");
-				pio_statement.setInt(1, oid);
-				pio_statement.setInt(2, Integer.valueOf(key));
-				pio_statement.setInt(3, productQty.get(key));
-				pio_statement.addBatch();
-			}
+				// hash table to store qty
+				Hashtable<String, Integer> productQty = new Hashtable<String, Integer>();
+				for (String pid : pids) {
+					// productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
+					if (productQty.containsKey(pid)) {
+						productQty.put(pid, productQty.get(pid) + 1);
+					} else {
+						productQty.put(pid, 1);
+					}
+				}
+				PreparedStatement pio_statement = null;
+				Set<String> keys = productQty.keySet();
+				con.setAutoCommit(false);
+				String products_in_orders_query = "INSERT INTO products_in_orders (oid, pid, quantity) "
+						+ "VALUES(?, ?, ?)";
 
-			session.setAttribute("cart", null);
-			st.close();
-			if (pio_statement != null) {
-				pio_statement.executeBatch();
-				pio_statement.close();
-			}
-			con.commit();
+				pio_statement = con.prepareStatement(products_in_orders_query);
+				for (String key : keys) {
+					out.println("<h1>" + key + "," + productQty.get(key) + "</h1>");
+					pio_statement.setInt(1, oid);
+					pio_statement.setInt(2, Integer.valueOf(key));
+					pio_statement.setInt(3, productQty.get(key));
+					pio_statement.addBatch();
+				}
 
-			RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" + oid);
-			rd.forward(request, response);
+				session.setAttribute("cart", null);
+				st.close();
+				if (pio_statement != null) {
+					pio_statement.executeBatch();
+					pio_statement.close();
+				}
+				con.commit();
+
+				RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" + oid);
+				rd.forward(request, response);
+			}
 		} catch (Exception e) {
 			;
 		}
@@ -414,4 +425,75 @@ public class Checkout extends HttpServlet {
 		return "Short description";
 	}// </editor-fold>
 
+	private boolean validateForm(HttpServletRequest request) {
+		String firstName = request.getParameter("lname");
+		String lastName = request.getParameter("fname");
+		String phoneNumber = request.getParameter("phonenum");
+		String shippingAddress = request.getParameter("addr");
+		String zip = request.getParameter("zipcode");
+		String shipping = request.getParameter("shipping");
+		String ccn = request.getParameter("ccn");
+		String expmo = request.getParameter("expmo");
+		String expyr = request.getParameter("expyr");
+		String security = request.getParameter("security");
+		String total = request.getParameter("total");
+		total = total.substring(1);
+
+		String regex = "^\\(?([0-9]{3})\\)?[-.\\s]?([0-9]{3})[-.\\s]?([0-9]{4})$";
+		Pattern pattern = Pattern.compile(regex);
+		Matcher match = pattern.matcher(phoneNumber);
+
+		if (firstName == null || firstName.equals("")) {
+			return false;
+		} else if (lastName == null || lastName.equals("")) {
+			return false;
+		} else if (phoneNumber == null || !match.matches()) {
+			return false;
+		} else if (shippingAddress == null) {
+			return false;
+		} else if (zip == null || zip.length() != 5 || !isNumeric(zip)) {
+			return false;
+		} else if (shipping == null) {
+			return false;
+		} else if (ccn == null || ccn.length() != 16 || !isNumeric(ccn)) {
+			return false;
+		} else if (expmo == null || !isNumeric(expmo)) {
+			return false;
+		} else if (expyr == null || !isNumeric(expyr)) {
+			return false;
+		} else if (security == null || !isNumeric(security) || security.length() != 3) {
+			return false;
+		} else if (total == null) {
+			return false;
+		}
+		return true;
+	}
+
+	public boolean isNumeric(String s) {
+		try {
+			Double.parseDouble(s);
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 }
+
+// if( !isset($_POST['fname']) || !isset($_POST['lname']) ){ return False; }
+// if( !isset($_POST['phonenum']) ||
+// preg_match("/^[0-9]{3}-[0-9]{4}-[0-9]{4}$/", $_POST['phonenum'])) { return
+// False; }
+// if( !isset($_POST['addr'])) { return False; }
+// if( !isset($_POST['zipcode']) || !is_numeric($_POST['zipcode']) && strlen(
+// strval($_POST['zipcode'])) != 5 ) { return False; }
+// if( !isset($_POST['shipping']) ) { return False; }
+// if( !isset($_POST['ccn']) || !is_numeric($_POST['ccn']) ||
+// strlen(strval($_POST['ccn'])) != 16) { return False; }
+// if( !isset($_POST['expmo']) || !is_numeric($_POST['expmo']) ) { return False;
+// }
+// if( !isset($_POST['expyr']) || !is_numeric($_POST['expyr'])) { return False;
+// }
+// if( !isset($_POST['security']) || strlen(strval($_POST['security'])) != 3 ) {
+// return False; }
+// if( !isset($_POST['total'])) { return False; }
+// return True;

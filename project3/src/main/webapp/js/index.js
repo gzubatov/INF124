@@ -3,11 +3,11 @@ const filters = Array.from(document.querySelectorAll('input[name="filter"]'));
 
 // image hover zoom
 products.forEach((product) => {
-	product.addEventListener('mouseover', function(event) {
+	product.addEventListener('mouseover', function (event) {
 		product.classList.add('product-scale');
 	});
 
-	product.addEventListener('mouseleave', function(event) {
+	product.addEventListener('mouseleave', function (event) {
 		product.classList.remove('product-scale');
 	});
 })
@@ -15,10 +15,10 @@ products.forEach((product) => {
 
 //const categories = [ 'floral', 'crafts-hobbies', 'home-office', 'knitting-crochet' ];
 const categories = {
-	floral             : 'floral',
-	'crafts-hobbies'   : 'crafts-hobbies',
-	'home-office'      : 'home-office',
-	'knitting-crochet' : 'knitting-crochet'
+	floral: 'floral',
+	'crafts-hobbies': 'crafts-hobbies',
+	'home-office': 'home-office',
+	'knitting-crochet': 'knitting-crochet'
 };
 
 let activeFilters = [];
@@ -28,11 +28,10 @@ filters.forEach((filter, index) => {
 		// if checked, add to active filters
 		if (filter.checked) {
 			activeFilters.push(filter);
-		}
-		else if (!filter.checked && activeFilters.includes(filter)) {
+		} else if (!filter.checked && activeFilters.includes(filter)) {
 			activeFilters = activeFilters.filter((f) => f !== filter);
 		}
-                
+
 		products.forEach((product) => {
 			// flag = false
 			// loop over activeFilters
@@ -48,8 +47,7 @@ filters.forEach((filter, index) => {
 			if (!flag) {
 				// Product doesn't include any active filer
 				product.classList.add('hidden'); // hide
-			}
-			else {
+			} else {
 				product.classList.remove('hidden'); // show
 			}
 		});
@@ -61,6 +59,7 @@ filters.forEach((filter, index) => {
 		}
 	});
 });
+
 
 /*
 
@@ -77,7 +76,7 @@ if (filter.checked) {
 					product.classList.remove('hidden');
 				}
             });
-            
+
             */
 
 /*

@@ -124,10 +124,10 @@ public class Index extends HttpServlet {
 			out.println("<div class=\"filterblock\">");
 			out.println("");
 			out.println("<div class=\"filter\">");
-			out.println("<div class=\"search-container\">");
-			out.println("<label for=\"search\">Search:</label>");
-			out.println("<input type=\"text\" id=\"search\" name=\"search\">");
-			out.println("</div>");
+			// out.println("<div class=\"search-container\">");
+			// out.println("<label for=\"search\">Search:</label>");
+			// out.println("<input type=\"text\" id=\"search\" name=\"search\">");
+			// out.println("</div>");
 			out.println("<h3>Filter by Categories</h3>");
 			out.println("<div class=\"checkbox\">");
 			out.println(
