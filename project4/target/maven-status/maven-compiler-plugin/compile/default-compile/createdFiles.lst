@@ -1,0 +1,5 @@
+com/uci/antsrusrestservice/ProductResource.class
+com/uci/antsrusrestservice/model/Product.class
+com/uci/antsrusrestservice/db/DatabaseConnector.class
+com/uci/antsrusrestservice/db/DatabaseUtils.class
+com/uci/antsrusrestservice/service/ProductService.class
