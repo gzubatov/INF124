@@ -3,6 +3,7 @@ package com.uci.antsrusrestservice.service;
 import com.uci.antsrusrestservice.db.DatabaseConnector;
 import com.uci.antsrusrestservice.db.DatabaseUtils;
 import com.uci.antsrusrestservice.model.Product;
+import com.uci.antsrusrestservice.model.Order;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -87,13 +88,26 @@ public class ProductService {
 		return products;
 	}
 
-	public static boolean AddProduct(Product p) {
+	public static boolean AddOrder(Order order) {
 
-		String sql = "INSERT INTO TODOS  (TODO_SUMMARY, TODO_DESC)" + "VALUES (?, ?)";
+		String sql = "INSERT INTO orders (first_name, last_name, phone_number, shipping_address, zip_code, "
+				+ "shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total, pids)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection connection = DatabaseConnector.getConnection();
-		return DatabaseUtils.performDBUpdate(connection, sql, p.getDescription(), p.getDescription());
-
+		return DatabaseUtils.performDBUpdate(connection, sql, order);
 	}
+	/*
+	 * public static boolean AddProductsInOrder() {
+	 * 
+	 * // for every product in order's products String sql =
+	 * "INSERT INTO TODOS  (TODO_SUMMARY, TODO_DESC)" + "VALUES (?, ?);"; // sql +=
+	 * " INSERT INTO TODOS (TODO_SUMMARY, TODO_DESC)" + "VALUES (?, ?);";
+	 * 
+	 * Connection connection = DatabaseConnector.getConnection();
+	 * 
+	 * return DatabaseUtils.performDBUpdate(connection, sql, p.getDescription(),
+	 * p.getDescription()); }
+	 */
 
 	public static boolean updateProduct(Product p) {
 

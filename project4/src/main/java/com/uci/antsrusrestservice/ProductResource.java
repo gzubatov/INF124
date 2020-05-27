@@ -1,11 +1,13 @@
 package com.uci.antsrusrestservice;
 
+import com.uci.antsrusrestservice.model.Order;
 import com.uci.antsrusrestservice.model.Product;
 import com.uci.antsrusrestservice.service.ProductService;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import java.util.List;
 
 /**
@@ -57,11 +59,11 @@ public class ProductResource {
 	// POST request will invoke this method.
 	@POST
 	@Consumes({ MediaType.APPLICATION_JSON }) // This method accepts a request of the JSON type
-	public Response addTodo(Product todo) {
+	public Response addTodo(Order order) {
 
 		// The todo object here is automatically constructed from the json request.
 		// Jersey is so cool!
-		if (ProductService.AddProduct(todo)) {
+		if (ProductService.AddOrder(order)) {
 			return Response.ok().entity("TODO Added Successfully").build();
 		}
 
@@ -76,19 +78,32 @@ public class ProductResource {
 	@Consumes({ MediaType.APPLICATION_FORM_URLENCODED }) // This method accepts form parameters.
 	// If you were to send a POST through a form submit, this method would be
 	// called.
-	public Response addTodo(@FormParam("summary") String summary, @FormParam("description") String description) {
-		Product todo = new Product();
-		// todo.setSummary(summary);
-		todo.setDescription(description);
+	public Response addTodo(@FormParam("fname") String fname, @FormParam("lname") String lname,
+			@FormParam("phonenum") String phonenum, @FormParam("addr") String addr, @FormParam("zipcode") int zipcode,
+			@FormParam("shipping") String shipping, @FormParam("ccn") long ccn, @FormParam("expmo") int expmo,
+			@FormParam("expyr") int expyr, @FormParam("security") int security, @FormParam("total") Double total,
+			@FormParam("pids") String pids) {
+		// "pid:quantity" ---> "1:1,2:1,3:2"
+		Order order = new Order();
+		order.setFirstName(fname);
+		order.setLastName(lname);
+		order.setPhoneNumber(phonenum);
+		order.setShippingAddress(addr);
+		order.setZipCode(zipcode);
+		order.setShippingAddress(addr);
+		order.setShippingMethod(shipping);
+		order.setCreditCard(ccn);
+		order.setExpMonth(expmo);
+		order.setExpYear(expyr);
+		order.setSecurityCode(security);
+		order.setPriceTotal(total);
+		order.setPids(pids);
 
-		System.out.println(todo);
-
-		if (ProductService.AddProduct(todo)) {
+		if (ProductService.AddOrder(order)) {
 			return Response.ok().entity("TODO Added Successfully").build();
 		}
 
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
-
 	}
 
 	// This method represents a PUT request where the id is provided as a path

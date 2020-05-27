@@ -50,3 +50,21 @@ CREATE TABLE `zip_codes` (
  `city` text NOT NULL,
  PRIMARY KEY (`zip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+
+
+// For project 4
+CREATE TABLE `orders` (`oid` int(11) NOT NULL AUTO_INCREMENT,
+ `first_name` text NOT NULL,
+ `last_name` text NOT NULL,
+ `phone_number` text NOT NULL,
+ `shipping_address` text NOT NULL,
+ `zip_code` bigint(20) NOT NULL,
+ `shipping_method` text NOT NULL,
+ `credit_card` bigint(20) unsigned NOT NULL,
+ `expiration_month` int(11) NOT NULL,
+ `expiration_year` int(11) NOT NULL,
+ `security_code` int(11) NOT NULL,
+ `price_total` double(25,2) NOT NULL,
+ `pids` text NOT NULL,
+ PRIMARY KEY (`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
