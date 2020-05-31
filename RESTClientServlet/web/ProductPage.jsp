@@ -16,17 +16,25 @@
 
 <body>
 	<%@ page language="java" %>
+
+	<%@ page import="java.text.SimpleDateFormat" %>
+	<%@ page import="java.util.Calendar" %>
+	<%
+    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
+    Cookie cookie = new Cookie(timeStamp, request.getParameter("pid"));
+	cookie.setMaxAge(60 * 60 * 24); // 1 day
+	response.addCookie(cookie);
+
+    %>
 	<!-- Navbar -->
 
 	<jsp:include page="NavBar.jsp" flush="true" />
 	<!--Product Information-->
 
-	<%! String url = ""; %>
-	<%
-        url += "/ProductPageServlet?pid=" + request.getParameter("pid"); 
+	<% String url = "";
+        url = "/ProductPageServlet?pid=" + request.getParameter("pid"); 
         %>
 	<jsp:include page="<%= url %>" flush="true" />
-
 
 </body>
 

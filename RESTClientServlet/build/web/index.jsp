@@ -16,6 +16,8 @@
 
 <body>
 	<%@ page language="java" %>
+	<jsp:include page="/Session" flush="true" />
+
 	<!-- Navbar -->
 
 	<jsp:include page="NavBar.jsp" flush="true" />
@@ -62,6 +64,8 @@
 			<jsp:include page="/ProductTable" flush="true" />
 		</div>
 	</div>
+	<!--History-->
+	<jsp:include page="/History" flush="true" />
 
 	<!-- scripts-->
 	<script src="./js/index.js"></script>

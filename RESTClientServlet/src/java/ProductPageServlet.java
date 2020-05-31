@@ -5,7 +5,6 @@
  */
 
 import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.type.TypeReference;
 import org.glassfish.jersey.client.ClientConfig;
 
 import javax.servlet.http.HttpServlet;
@@ -19,9 +18,10 @@ import javax.ws.rs.core.UriBuilder;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
-import java.util.List;
+import java.text.SimpleDateFormat;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import java.util.Calendar;
 
 /**
  *
@@ -42,13 +42,14 @@ public class ProductPageServlet extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
 		try {
+
+			String pid = request.getParameter("pid");
+
 			PrintWriter out = response.getWriter();
 			ClientConfig config = new ClientConfig();
 			Client client = ClientBuilder.newClient(config);
 			WebTarget target = client.target(getBaseURI());
-			out.println("<h1>hi</h1>");
-			out.println("<h1>" + request.getParameter("pid") + "</h1>");
-			String pid = request.getParameter("pid");
+
 			// .path(request.getParameter("pid"))
 			String jsonResponse = target.path("v1").path("api").path("todos").path(pid).request(). // send a request
 					accept(MediaType.APPLICATION_JSON). // specify the media type of the response
@@ -61,8 +62,29 @@ public class ProductPageServlet extends HttpServlet {
 			// List<Product> productList = objectMapper.readValue(jsonResponse, new
 			// TypeReference<List<Product>>() {
 			// });
+			String details = product.getDetails();
+			String[] detailsSplit = details.split(",");
 
-			out.println(jsonResponse);
+			out.println("<div id=\"main\">");
+			out.println("<div id=\"info\">");
+			out.println("<img id=\"product_image\" src=\"" + product.getImage() + "\" alt=\"Product image\">");
+			out.println("<div>");
+			out.println("<h3 id=\"name\">" + product.getName() + " - $" + product.getPrice() + " </h3>");
+			out.println("<form method = \"post\" action = \"/RESTClientServlet/Cart\">");
+			out.println("<input type = \"text\" name =\"pid\" value=\"" + product.getPid() + "\" hidden>");
+			out.println("<input type = \"submit\" name =\"cart\" value=\"Add To Cart\">");
+			out.println("");
+			out.print("</form>");
+			out.println("<h5 id=\"pid\">pid: " + product.getPid() + "</h5>");
+			out.println("<p id=\"description\">" + product.getDescription() + "</p>");
+			out.println("<p id=\"details\">");
+			out.println("<ul>");
+			for (String s : detailsSplit) {
+				out.println("<li>" + s + "</li>");
+			}
+			out.println("</ul></p>");
+			out.println("</div>");
+			out.println("</div>");
 
 		} catch (Exception e) {
 		}

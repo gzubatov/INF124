@@ -1,8 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <servlet>
-        <servlet-name>test</servlet-name>
-        <servlet-class>test</servlet-class>
+        <servlet-name>History</servlet-name>
+        <servlet-class>History</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Cart</servlet-name>
+        <servlet-class>Cart</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <servlet-class>CheckoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>GetZipCode</servlet-name>
+        <servlet-class>GetZipCode</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Confirmation</servlet-name>
+        <servlet-class>Confirmation</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ProductTable</servlet-name>
@@ -12,9 +28,29 @@
         <servlet-name>ProductPageServlet</servlet-name>
         <servlet-class>ProductPageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Session</servlet-name>
+        <servlet-class>Session</servlet-class>
+    </servlet>
     <servlet-mapping>
-        <servlet-name>test</servlet-name>
-        <url-pattern>/test</url-pattern>
+        <servlet-name>History</servlet-name>
+        <url-pattern>/History</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Cart</servlet-name>
+        <url-pattern>/Cart</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CheckoutServlet</servlet-name>
+        <url-pattern>/CheckoutServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetZipCode</servlet-name>
+        <url-pattern>/GetZipCode</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Confirmation</servlet-name>
+        <url-pattern>/Confirmation</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductTable</servlet-name>
@@ -23,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>ProductPageServlet</servlet-name>
         <url-pattern>/ProductPageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Session</servlet-name>
+        <url-pattern>/Session</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
