@@ -1,7 +1,5 @@
 package com.uci.antsrusrestservice.model;
 
-import java.util.ArrayList;
-
 public class Order {
 	private String firstName;
 	private String lastName;
@@ -15,6 +13,9 @@ public class Order {
 	private int securityCode;
 	private double priceTotal;
 	private String pids;
+
+	public Order() {
+	}
 
 	public String getFirstName() {
 		return firstName;

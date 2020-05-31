@@ -1,63 +1,63 @@
 package com.uci.antsrusrestservice.model;
-
-//import javax.xml.bind.annotation.XmlRootElement;
-
 //You will need to create a Java Object. Jersey uses these to contruct requests and responses.
 
 public class Product {
-    private int pid;
-    private double price;
-    private String name;
-    private String image;
-    private String description;
-    private String details;
+	private int pid;
+	private double price;
+	private String name;
+	private String image;
+	private String description;
+	private String details;
 
-    public void setPid(int pid) {
-        this.pid = pid;
-    }
+	public Product() {
+	}
 
-    public int getPid() {
-        return pid;
+	public void setPid(int pid) {
+		this.pid = pid;
+	}
 
-    }
+	public int getPid() {
+		return pid;
 
-    public String getName() {
-        return name;
-    }
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public String getDetails() {
-        return details;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public void setDetails(String details) {
-        this.details = details;
-    }
+	public String getDetails() {
+		return details;
+	}
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+	public void setDetails(String details) {
+		this.details = details;
+	}
 
-    public String getImage() {
-        return image;
-    }
+	public void setImage(String image) {
+		this.image = image;
+	}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+	public String getImage() {
+		return image;
+	}
 
-    public double getPrice() {
-        return price;
-    }
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public double getPrice() {
+		return price;
+	}
 }
