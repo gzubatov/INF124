@@ -14,6 +14,7 @@ import java.util.List;
 public class ProductService {
 
 	private final static String ALL_PRODUCTS_QUERY = "SELECT * FROM products";
+	private final static String ORDER_QUERY = "SELECT * FROM orders WHERE oid = ";
 
 	public static Product getProductByPid(int pid) {
 		// Get a new connection object before going forward with the JDBC invocation.
@@ -88,13 +89,13 @@ public class ProductService {
 		return products;
 	}
 
-	public static boolean AddOrder(Order order) {
+	public static int AddOrder(Order order) {
 
 		String sql = "INSERT INTO orders (first_name, last_name, phone_number, shipping_address, zip_code, "
 				+ "shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total, pids)"
 				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection connection = DatabaseConnector.getConnection();
-		return DatabaseUtils.performDBUpdate(connection, sql, order);
+		return DatabaseUtils.performDBOrderInsert(connection, sql, order);
 	}
 	/*
 	 * public static boolean AddProductsInOrder() {
@@ -144,5 +145,45 @@ public class ProductService {
 		}
 
 		return updateStatus;
+	}
+
+	public static Order getOrderByOid(int oid) {
+		// Get a new connection object before going forward with the JDBC invocation.
+		Connection connection = DatabaseConnector.getConnection();
+		ResultSet resultSet = DatabaseUtils.retrieveQueryResults(connection, ORDER_QUERY + oid);
+
+		if (resultSet != null) {
+			try {
+				while (resultSet.next()) {
+					Order order = new Order();
+					order.setFirstName(resultSet.getString("first_name"));
+					order.setLastName(resultSet.getString("last_name"));
+					order.setPhoneNumber(resultSet.getString("phone_number"));
+					order.setZipCode(resultSet.getInt("zip_code"));
+					order.setShippingAddress(resultSet.getString("shipping_address"));
+					order.setShippingMethod(resultSet.getString("shipping_method"));
+					order.setCreditCard(resultSet.getLong("credit_card"));
+					order.setExpMonth(resultSet.getInt("expiration_month"));
+					order.setExpYear(resultSet.getInt("expiration_year"));
+					order.setSecurityCode(resultSet.getInt("security_code"));
+					order.setPriceTotal(resultSet.getDouble("price_total"));
+					order.setPids(resultSet.getString("pids"));
+					return order;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					// We will always close the connection once we are done interacting with the
+					// Database.
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return null;
+
 	}
 }

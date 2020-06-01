@@ -25,7 +25,7 @@ public class ProductResource {
 	@Path("{id}")
 	@GET
 	@Produces({ MediaType.APPLICATION_JSON }) // This provides only JSON responses
-	public Response getTodoById(@PathParam("id") int id/* The {id} placeholder parameter is resolved */) {
+	public Response getProductResourceByPid(@PathParam("id") int id/* The {id} placeholder parameter is resolved */) {
 		// invokes the DB method which will fetch a todo_list item object by id
 		Product todo = ProductService.getProductByPid(id);
 
@@ -63,8 +63,10 @@ public class ProductResource {
 
 		// The todo object here is automatically constructed from the json request.
 		// Jersey is so cool!
-		if (ProductService.AddOrder(order)) {
-			return Response.ok().entity("TODO Added Successfully").build();
+		int oid = ProductService.AddOrder(order);
+		if (oid != -1) {
+
+			return Response.ok().entity(Integer.toString(oid)).build();
 		}
 
 		// Return an Internal Server error because something wrong happened. This should
@@ -81,8 +83,8 @@ public class ProductResource {
 	public Response addTodo(@FormParam("fname") String fname, @FormParam("lname") String lname,
 			@FormParam("phonenum") String phonenum, @FormParam("addr") String addr, @FormParam("zipcode") int zipcode,
 			@FormParam("shipping") String shipping, @FormParam("ccn") long ccn, @FormParam("expmo") int expmo,
-			@FormParam("expyr") int expyr, @FormParam("security") int security, @FormParam("total") Double total,
-			@FormParam("pids") String pids) {
+			@FormParam("expyr") int expyr, @FormParam("security") int security, @FormParam("total") Double total) {
+		// @FormParam("pids") String pids = "1,2") {
 		// "pid:quantity" ---> "1:1,2:1,3:2"
 		Order order = new Order();
 		order.setFirstName(fname);
@@ -90,17 +92,17 @@ public class ProductResource {
 		order.setPhoneNumber(phonenum);
 		order.setShippingAddress(addr);
 		order.setZipCode(zipcode);
-		order.setShippingAddress(addr);
 		order.setShippingMethod(shipping);
 		order.setCreditCard(ccn);
 		order.setExpMonth(expmo);
 		order.setExpYear(expyr);
 		order.setSecurityCode(security);
 		order.setPriceTotal(total);
-		order.setPids(pids);
+		order.setPids("1:1,2:1,3:2");
 
-		if (ProductService.AddOrder(order)) {
-			return Response.ok().entity("TODO Added Successfully").build();
+		int oid = ProductService.AddOrder(order);
+		if (oid != -1) {
+			return Response.ok().entity(Integer.toString(oid)).build();
 		}
 
 		return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();

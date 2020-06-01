@@ -43,8 +43,9 @@ public class Confirmation extends HttpServlet {
 		} catch (Exception e) {
 			;
 		}
-		try (PrintWriter out = response.getWriter()) {
-
+		try {
+			PrintWriter out = response.getWriter();
+			/*
 			Properties properties = new Properties();
 			properties.setProperty("useSSL", "false");
 			properties.setProperty("allowPublicKeyRetrieval", "true");
@@ -69,7 +70,7 @@ public class Confirmation extends HttpServlet {
 			orderSet.next();
 			String address_query = "SELECT city, state" + " FROM zip_codes WHERE zip=" + orderSet.getInt("zip_code");
 			ResultSet addressSet = address_statement.executeQuery(address_query);
-			addressSet.next();
+			addressSet.next();*/
 
 			out.println("<!doctype html>");
 			out.println("<html lang=\"en\">");

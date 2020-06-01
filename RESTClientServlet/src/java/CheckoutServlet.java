@@ -22,9 +22,14 @@ import java.util.regex.Pattern;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
+import javax.print.attribute.standard.Media;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.glassfish.jersey.client.ClientConfig;
+import javax.ws.rs.client.Invocation;
+import javax.ws.rs.core.Response;
+import org.graalvm.compiler.nodes.memory.address.AddressNode.Address;
 
 /**
  *
@@ -44,7 +49,8 @@ public class CheckoutServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		response.setContentType("text/html;charset=UTF-8");
-		try (PrintWriter out = response.getWriter()) {
+		try {
+			PrintWriter out = response.getWriter();
 			HttpSession session = request.getSession(true);
 			ArrayList<String> cart = (ArrayList<String>) session.getAttribute("cart");
 			int cartSize = cart.size();
@@ -62,7 +68,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			for (String pid : cart) {
 
-				String jsonResponse = target.path("v1").path("api").path("todos").path(pid).request(). // send a request
+				String jsonResponse = target.path(pid).request(). // send a request
 						accept(MediaType.APPLICATION_JSON). // specify the media type of the response
 						get(String.class); // use the get method and return the response as a string
 
@@ -78,7 +84,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			out.println("<div id=\"form\">");
 			out.println("<h3>Enter your details</h3>");
-			out.println("<form action=\"/RESTClientServlet/CheckoutServlet\" method=\"post\">");
+			out.println("<form action=\"/RESTClientServlet/CheckoutServlet\" method=\"post\" >");
 
 			out.println("<div class=\"name\">");
 			out.println("<div>");
@@ -228,6 +234,8 @@ public class CheckoutServlet extends HttpServlet {
 
 			out.println("</div>");
 			out.println("</div>");
+		} catch (Exception e) {
+			;
 		}
 	}
 
@@ -259,111 +267,123 @@ public class CheckoutServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		try {
-			// response.setContentType("text/html;charset=UTF-8");
+			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
 			out.println("<h1>POST WORKED</h1>");
 
-			// if (validateForm(request) == false) {
-			// out.println("<script>alert(\"Database processing error\")</script>");
-			// processRequest(request, response);
-			// } else {
+			if (validateForm(request) == false) {
+				out.println("<script>alert(\"Database processing error\")</script>");
+				processRequest(request, response);
+			} else {
 
-			// HttpSession session = request.getSession(true);
-			// ArrayList<String> pids = (ArrayList<String>) session.getAttribute("cart");
-			// Properties properties = new Properties();
-			// properties.setProperty("useSSL", "false");
-			// properties.setProperty("allowPublicKeyRetrieval", "true");
-			// properties.setProperty("serverTimezone", "UTC");
-			// properties.setProperty("user", "swantoma");
-			// properties.setProperty("password", "tmp123!");
-			// Connection con =
-			// DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts",
-			// properties);
+				HttpSession session = request.getSession(true);
+				ArrayList<String> pids = (ArrayList<String>) session.getAttribute("cart");
 
-			// String firstName = request.getParameter("lname");
-			// String lastName = request.getParameter("fname");
-			// String phoneNumber = request.getParameter("phonenum");
-			// String shippingAddress = request.getParameter("addr");
-			// String zip = request.getParameter("zipcode");
-			// String shipping = request.getParameter("shipping");
-			// String ccn = request.getParameter("ccn");
-			// String expmo = request.getParameter("expmo");
-			// String expyr = request.getParameter("expyr");
-			// String security = request.getParameter("security");
-			// String total = request.getParameter("total");
-			// total = total.substring(1);
+				/*
+				 * Properties properties = new Properties(); properties.setProperty("useSSL",
+				 * "false"); properties.setProperty("allowPublicKeyRetrieval", "true");
+				 * properties.setProperty("serverTimezone", "UTC");
+				 * properties.setProperty("user", "swantoma");
+				 * properties.setProperty("password", "tmp123!"); Connection con =
+				 * DriverManager.getConnection("jdbc:mysql://localhost:3306/arts_and_crafts",
+				 * properties);
+				 */
 
-			// String query = "INSERT INTO orders (first_name, "
-			// + "last_name, phone_number, shipping_address, zip_code, shipping_method,
-			// credit_card, expiration_month, expiration_year, security_code, price_total)"
-			// + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-			// PreparedStatement st = con.prepareStatement(query,
-			// Statement.RETURN_GENERATED_KEYS);
-			// st.setString(1, firstName);
-			// st.setString(2, lastName);
-			// st.setString(3, phoneNumber);
-			// st.setString(4, shippingAddress);
-			// st.setInt(5, Integer.valueOf(zip));
-			// st.setString(6, shipping);
-			// st.setLong(7, Long.valueOf(ccn));
-			// st.setInt(8, Integer.valueOf(expmo));
-			// st.setInt(9, Integer.valueOf(expyr));
-			// st.setInt(10, Integer.valueOf(security));
-			// st.setDouble(11, Double.valueOf(total));
-			// int numAffectedRows = st.executeUpdate();
-			// int oid;
+				String firstName = request.getParameter("lname");
+				String lastName = request.getParameter("fname");
+				String phoneNumber = request.getParameter("phonenum");
+				String shippingAddress = request.getParameter("addr");
+				int zip = Integer.valueOf(request.getParameter("zipcode"));
+				String shipping = request.getParameter("shipping");
+				Long ccn = Long.valueOf(request.getParameter("ccn"));
+				int expmo = Integer.valueOf(request.getParameter("expmo"));
+				int expyr = Integer.valueOf(request.getParameter("expyr"));
+				int security = Integer.valueOf(request.getParameter("security"));
+				String total_str = request.getParameter("total");
+				total_str = total_str.substring(1);
+				Order order = new Order();
+				Double total = Double.valueOf(total_str);
+				ClientConfig config = new ClientConfig();
+				Client client = ClientBuilder.newClient(config);
+				WebTarget target = client.target(getBaseURI());
 
-			// if (numAffectedRows == 0) {
-			// throw new SQLException("Inserting into products_in_orders failed");
-			// }
+				order.setFirstName(firstName);
+				order.setLastName(lastName);
+				order.setPhoneNumber(phoneNumber);
+				order.setShippingAddress(shippingAddress);
+				order.setZipCode(zip);
+				order.setShippingMethod(shipping);
+				order.setCreditCard(ccn);
+				order.setExpMonth(expmo);
+				order.setExpYear(expyr);
+				order.setSecurityCode(security);
+				order.setPriceTotal(total);
+				order.setPids("1:1,2:1,3:2");
 
-			// try (ResultSet generatedKeys = st.getGeneratedKeys()) {
-			// if (generatedKeys.next()) {
-			// oid = generatedKeys.getInt(1);
-			// } else {
-			// throw new SQLException("Inserting into products_in_orders failed, no ID
-			// obtained.");
-			// }
-			// }
+				Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
+				Response api_respn = invocationBuilder.post(Entity.entity(order, MediaType.APPLICATION_JSON));
+				/*
+				 * String jsonResponse = target.path("v1").path("api").path("todos").request().
+				 * // send a request accept(MediaType.APPLICATION_JSON). // specify the media
+				 * type of the response post(Entity.entity(order, MediaType.APPLICATION_JSON));
+				 * // use the get method and return the response as a string
+				 */
+				if (api_respn.hasEntity()) {
+					// out.println("<h1>" + api_respn.readEntity(String.class) + "</h1>");
+					String oid = api_respn.readEntity(String.class);
+					RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" + oid);
+					rd.forward(request, response);
+				} else {
+					out.println("<h1>Databse Processing Error</h1>");
+				}
 
-			// // hash table to store qty
-			// Hashtable<String, Integer> productQty = new Hashtable<String, Integer>();
-			// for (String pid : pids) {
-			// // productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
-			// if (productQty.containsKey(pid)) {
-			// productQty.put(pid, productQty.get(pid) + 1);
-			// } else {
-			// productQty.put(pid, 1);
-			// }
-			// }
-			// PreparedStatement pio_statement = null;
-			// Set<String> keys = productQty.keySet();
-			// con.setAutoCommit(false);
-			// String products_in_orders_query = "INSERT INTO products_in_orders (oid, pid,
-			// quantity) "
-			// + "VALUES(?, ?, ?)";
-
-			// pio_statement = con.prepareStatement(products_in_orders_query);
-			// for (String key : keys) {
-			// out.println("<h1>" + key + "," + productQty.get(key) + "</h1>");
-			// pio_statement.setInt(1, oid);
-			// pio_statement.setInt(2, Integer.valueOf(key));
-			// pio_statement.setInt(3, productQty.get(key));
-			// pio_statement.addBatch();
-			// }
-
-			// session.setAttribute("cart", null);
-			// st.close();
-			// if (pio_statement != null) {
-			// pio_statement.executeBatch();
-			// pio_statement.close();
-			// }
-			// con.commit();
-
-			// RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" +
-			// oid);
-			// rd.forward(request, response);
+				/*
+				 * String query = "INSERT INTO orders (first_name, " + "last_name, phone_number,
+				 * shipping_address, zip_code, shipping_method, credit_card, expiration_month,
+				 * expiration_year, security_code, price_total, pids)" +
+				 * "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; PreparedStatement st =
+				 * con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS); st.setString(1,
+				 * firstName); st.setString(2, lastName); st.setString(3, phoneNumber);
+				 * st.setString(4, shippingAddress); st.setInt(5, Integer.valueOf(zip));
+				 * st.setString(6, shipping); st.setLong(7, Long.valueOf(ccn)); st.setInt(8,
+				 * Integer.valueOf(expmo)); st.setInt(9, Integer.valueOf(expyr)); st.setInt(10,
+				 * Integer.valueOf(security)); st.setDouble(11, Double.valueOf(total)); int
+				 * numAffectedRows = st.executeUpdate(); int oid;
+				 *
+				 *
+				 *
+				 * if (numAffectedRows == 0) { throw new
+				 * SQLException("Inserting into products_in_orders failed"); }
+				 *
+				 * try (ResultSet generatedKeys = st.getGeneratedKeys()) { if
+				 * (generatedKeys.next()) { oid = generatedKeys.getInt(1); } else { throw new
+				 * SQLException("Inserting into products_in_orders failed, no ID obtained."); }
+				 * }
+				 *
+				 * // hash table to store qty Hashtable<String, Integer> productQty = new
+				 * Hashtable<String, Integer>(); for (String pid : pids) { //
+				 * productQty.put(pid, productQty.getOrDefault(pid, 0) + 1); if
+				 * (productQty.containsKey(pid)) { productQty.put(pid, productQty.get(pid) + 1);
+				 * } else { productQty.put(pid, 1); } } PreparedStatement pio_statement = null;
+				 * Set<String> keys = productQty.keySet(); con.setAutoCommit(false); String
+				 * products_in_orders_query = "INSERT INTO products_in_orders (oid, pid,
+				 * quantity) " + "VALUES(?, ?, ?)";
+				 *
+				 * pio_statement = con.prepareStatement(products_in_orders_query); for (String
+				 * key : keys) { out.println("<h1>" + key + "," + productQty.get(key) +
+				 * "</h1>"); pio_statement.setInt(1, oid); pio_statement.setInt(2,
+				 * Integer.valueOf(key)); pio_statement.setInt(3, productQty.get(key));
+				 * pio_statement.addBatch(); }
+				 *
+				 * session.setAttribute("cart", null); st.close(); if (pio_statement != null) {
+				 * pio_statement.executeBatch(); pio_statement.close(); } con.commit();
+				 *
+				 * RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" +
+				 * oid); rd.forward(request, response);
+				 */
+			}
 		} catch (Exception e) {
+			;
 		}
 
 	}
@@ -433,7 +453,7 @@ public class CheckoutServlet extends HttpServlet {
 
 	private static URI getBaseURI() {
 		// Change the URL here to make the client point to your service.
-		return UriBuilder.fromUri("http://localhost:8080/project4").build();
+		return UriBuilder.fromUri("http://localhost:8080/project4/v1/api/todos").build();
 		// Swan: mine was already running at this location, no need to change.
 	}
 }
