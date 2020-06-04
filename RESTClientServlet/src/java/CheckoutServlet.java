@@ -31,6 +31,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.Response;
 import org.graalvm.compiler.nodes.memory.address.AddressNode.Address;
 
+import java.util.Map;
+
 /**
  *
  * @author swantoma
@@ -59,7 +61,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			Client client = ClientBuilder.newClient(config);
 
-			WebTarget target = client.target(getBaseURI());
+			WebTarget target = client.target(getTodosURI());
 
 			out.println("<div id=\"main\">");
 			out.println("<div id=\"cart\">");
@@ -269,7 +271,6 @@ public class CheckoutServlet extends HttpServlet {
 		try {
 			response.setContentType("text/html;charset=UTF-8");
 			PrintWriter out = response.getWriter();
-			out.println("<h1>POST WORKED</h1>");
 
 			if (validateForm(request) == false) {
 				out.println("<script>alert(\"Database processing error\")</script>");
@@ -303,9 +304,28 @@ public class CheckoutServlet extends HttpServlet {
 				total_str = total_str.substring(1);
 				Order order = new Order();
 				Double total = Double.valueOf(total_str);
+				String city = request.getParameter("city");
+				String state = request.getParameter("state");
 				ClientConfig config = new ClientConfig();
 				Client client = ClientBuilder.newClient(config);
-				WebTarget target = client.target(getBaseURI());
+				WebTarget target = client.target(getOrdersURI());
+
+				Hashtable<String, Integer> productQty = new Hashtable<String, Integer>();
+				for (String pid : pids) {
+					productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
+					if (productQty.containsKey(pid)) {
+						productQty.put(pid, productQty.get(pid) + 1);
+					} else {
+						productQty.put(pid, 1);
+					}
+				}
+
+				String pids_qts = "";
+
+				for (Map.Entry<String, Integer> entry : productQty.entrySet()) {
+					pids_qts += entry.getKey() + ":" + entry.getValue() + ",";
+				}
+				pids_qts = pids_qts.substring(0, pids_qts.length() - 1); // remove last comma
 
 				order.setFirstName(firstName);
 				order.setLastName(lastName);
@@ -318,7 +338,9 @@ public class CheckoutServlet extends HttpServlet {
 				order.setExpYear(expyr);
 				order.setSecurityCode(security);
 				order.setPriceTotal(total);
-				order.setPids("1:1,2:1,3:2");
+				order.setPids(pids_qts);
+				order.setCity(city);
+				order.setState(state);
 
 				Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 				Response api_respn = invocationBuilder.post(Entity.entity(order, MediaType.APPLICATION_JSON));
@@ -451,7 +473,13 @@ public class CheckoutServlet extends HttpServlet {
 		return true;
 	}
 
-	private static URI getBaseURI() {
+	private static URI getOrdersURI() {
+		// Change the URL here to make the client point to your service.
+		return UriBuilder.fromUri("http://localhost:8080/project4/v1/api/orders").build();
+		// Swan: mine was already running at this location, no need to change.
+	}
+
+	private static URI getTodosURI() {
 		// Change the URL here to make the client point to your service.
 		return UriBuilder.fromUri("http://localhost:8080/project4/v1/api/todos").build();
 		// Swan: mine was already running at this location, no need to change.

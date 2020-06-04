@@ -58,6 +58,8 @@ public class DatabaseUtils {
 			preparedStatement.setInt(10, o.getSecurityCode());
 			preparedStatement.setDouble(11, o.getPriceTotal());
 			preparedStatement.setString(12, o.getPids());
+			preparedStatement.setString(13, o.getCity());
+			preparedStatement.setString(14, o.getState());
 
 			return preparedStatement.executeUpdate() > 0;
 
@@ -85,6 +87,8 @@ public class DatabaseUtils {
 			preparedStatement.setInt(10, o.getSecurityCode());
 			preparedStatement.setDouble(11, o.getPriceTotal());
 			preparedStatement.setString(12, o.getPids());
+			preparedStatement.setString(13, o.getCity());
+			preparedStatement.setString(14, o.getState());
 
 			numAffectedRows = preparedStatement.executeUpdate();
 

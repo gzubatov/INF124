@@ -92,8 +92,8 @@ public class ProductService {
 	public static int AddOrder(Order order) {
 
 		String sql = "INSERT INTO orders (first_name, last_name, phone_number, shipping_address, zip_code, "
-				+ "shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total, pids)"
-				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+				+ "shipping_method, credit_card, expiration_month, expiration_year, security_code, price_total, pids, city, state)"
+				+ " VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		Connection connection = DatabaseConnector.getConnection();
 		return DatabaseUtils.performDBOrderInsert(connection, sql, order);
 	}
@@ -156,6 +156,7 @@ public class ProductService {
 			try {
 				while (resultSet.next()) {
 					Order order = new Order();
+					order.setOid(resultSet.getInt("oid"));
 					order.setFirstName(resultSet.getString("first_name"));
 					order.setLastName(resultSet.getString("last_name"));
 					order.setPhoneNumber(resultSet.getString("phone_number"));
@@ -168,6 +169,8 @@ public class ProductService {
 					order.setSecurityCode(resultSet.getInt("security_code"));
 					order.setPriceTotal(resultSet.getDouble("price_total"));
 					order.setPids(resultSet.getString("pids"));
+					order.setCity(resultSet.getString("city"));
+					order.setState(resultSet.getString("state"));
 					return order;
 				}
 			} catch (SQLException e) {

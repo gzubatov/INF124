@@ -1,6 +1,6 @@
 
-
 public class Order {
+	private int oid;
 	private String firstName;
 	private String lastName;
 	private String phoneNumber;
@@ -13,6 +13,8 @@ public class Order {
 	private int securityCode;
 	private double priceTotal;
 	private String pids;
+	private String city;
+	private String state;
 
 	public Order() {
 	}
@@ -111,5 +113,29 @@ public class Order {
 
 	public void setPids(String orderPids) {
 		pids = orderPids;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String cty) {
+		city = cty;
+	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String st) {
+		state = st;
+	}
+
+	public int getOid() {
+		return oid;
+	}
+
+	public void setOid(int id) {
+		oid = id;
 	}
 }

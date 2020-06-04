@@ -66,5 +66,7 @@ CREATE TABLE `orders` (`oid` int(11) NOT NULL AUTO_INCREMENT,
  `security_code` int(11) NOT NULL,
  `price_total` double(25,2) NOT NULL,
  `pids` text NOT NULL,
+ `city` text,
+ `state` text,
  PRIMARY KEY (`oid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
