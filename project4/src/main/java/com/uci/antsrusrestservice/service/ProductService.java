@@ -4,6 +4,8 @@ import com.uci.antsrusrestservice.db.DatabaseConnector;
 import com.uci.antsrusrestservice.db.DatabaseUtils;
 import com.uci.antsrusrestservice.model.Product;
 import com.uci.antsrusrestservice.model.Order;
+import com.uci.antsrusrestservice.model.Category;
+import com.uci.antsrusrestservice.model.ZipCode;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -189,4 +191,72 @@ public class ProductService {
 		return null;
 
 	}
+
+	public static List<Category> getCategoriesByPid(int pid) {
+		List<Category> categories = new ArrayList<Category>();
+
+		Connection connection = DatabaseConnector.getConnection();
+		// ResultSet resultSetProduct = DatabaseUtils.retrieveQueryResults(connection,
+		// ALL_PRODUCTS_QUERY + "WHERE products.pid =" + pid);
+		ResultSet resultSetCid = DatabaseUtils.retrieveQueryResults(connection,
+				"SELECT c.category FROM products as p, categories as c, product_has_category as pc WHERE p.pid = pc.pid AND c.cid = pc.cid AND p.pid = "
+						+ pid);
+
+		if (resultSetCid != null) {
+			try {
+				while (resultSetCid.next()) {
+					Category cat = new Category();
+					cat.setCategory(resultSetCid.getString("category"));
+					categories.add(cat);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return categories;
+	}
+
+	public static ZipCode getZipById(int zip) {
+		// Get a new connection object before going forward with the JDBC invocation.
+		Connection connection = DatabaseConnector.getConnection();
+		String zipQuery = "SELECT z.city, z.state, t.combined_rate FROM zip_codes as z, tax_rates as t WHERE z.zip = "
+				+ zip + " AND z.zip = t.zip;";
+		ResultSet resultSet = DatabaseUtils.retrieveQueryResults(connection, zipQuery);
+
+		if (resultSet != null) {
+			try {
+				while (resultSet.next()) {
+					ZipCode zipCode = new ZipCode();
+
+					zipCode.setZipCode(zip);
+					zipCode.setCity(resultSet.getString("city"));
+					zipCode.setState(resultSet.getString("state"));
+					zipCode.setTaxRate(resultSet.getDouble("combined_rate"));
+					return zipCode;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			} finally {
+				try {
+
+					// We will always close the connection once we are done interacting with the
+					// Database.
+					connection.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return null;
+
+	}
+
 }

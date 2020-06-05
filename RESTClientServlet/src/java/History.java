@@ -66,7 +66,7 @@ public class History extends HttpServlet {
 			if (cookies != null) {
 				for (Cookie cookie : list) {
 					if (!pids.contains(cookie.getValue())) {
-						jsonResponse = target.path("v1").path("api").path("todos").path(cookie.getValue()).request()
+						jsonResponse = target.path("v1").path("api").path("products").path(cookie.getValue()).request()
 								.accept(MediaType.APPLICATION_JSON).get(String.class);
 
 						objectMapper = new ObjectMapper(); // This object is from the jackson library

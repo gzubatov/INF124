@@ -61,7 +61,7 @@ public class CheckoutServlet extends HttpServlet {
 
 			Client client = ClientBuilder.newClient(config);
 
-			WebTarget target = client.target(getTodosURI());
+			WebTarget target = client.target(getProductsURI());
 
 			out.println("<div id=\"main\">");
 			out.println("<div id=\"cart\">");
@@ -312,7 +312,7 @@ public class CheckoutServlet extends HttpServlet {
 
 				Hashtable<String, Integer> productQty = new Hashtable<String, Integer>();
 				for (String pid : pids) {
-					productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
+					// productQty.put(pid, productQty.getOrDefault(pid, 0) + 1);
 					if (productQty.containsKey(pid)) {
 						productQty.put(pid, productQty.get(pid) + 1);
 					} else {
@@ -344,15 +344,11 @@ public class CheckoutServlet extends HttpServlet {
 
 				Invocation.Builder invocationBuilder = target.request(MediaType.APPLICATION_JSON);
 				Response api_respn = invocationBuilder.post(Entity.entity(order, MediaType.APPLICATION_JSON));
-				/*
-				 * String jsonResponse = target.path("v1").path("api").path("todos").request().
-				 * // send a request accept(MediaType.APPLICATION_JSON). // specify the media
-				 * type of the response post(Entity.entity(order, MediaType.APPLICATION_JSON));
-				 * // use the get method and return the response as a string
-				 */
+
 				if (api_respn.hasEntity()) {
 					// out.println("<h1>" + api_respn.readEntity(String.class) + "</h1>");
 					String oid = api_respn.readEntity(String.class);
+					session.setAttribute("cart", null);
 					RequestDispatcher rd = request.getRequestDispatcher("/Confirmation?oid=" + oid);
 					rd.forward(request, response);
 				} else {
@@ -405,7 +401,14 @@ public class CheckoutServlet extends HttpServlet {
 				 */
 			}
 		} catch (Exception e) {
-			;
+			PrintWriter out = response.getWriter();
+			out.println("<h1>" + e.getMessage() + "</h1>");
+			out.println("<h1>" + e.toString() + "</h1>");
+
+			System.out.println("<h1>" + e.getMessage() + "</h1>");
+			System.out.println("<h1>" + e.toString() + "</h1>");
+			e.printStackTrace();
+
 		}
 
 	}
@@ -479,9 +482,9 @@ public class CheckoutServlet extends HttpServlet {
 		// Swan: mine was already running at this location, no need to change.
 	}
 
-	private static URI getTodosURI() {
+	private static URI getProductsURI() {
 		// Change the URL here to make the client point to your service.
-		return UriBuilder.fromUri("http://localhost:8080/project4/v1/api/todos").build();
+		return UriBuilder.fromUri("http://localhost:8080/project4/v1/api/products").build();
 		// Swan: mine was already running at this location, no need to change.
 	}
 }

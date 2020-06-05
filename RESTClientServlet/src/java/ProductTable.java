@@ -48,7 +48,7 @@ public class ProductTable extends HttpServlet {
 
 			WebTarget target = client.target(getBaseURI());
 
-			String jsonResponse = target.path("v1").path("api").path("todos").request(). // send a request
+			String jsonResponse = target.path("v1").path("api").path("products").request(). // send a request
 					accept(MediaType.APPLICATION_JSON). // specify the media type of the response
 					get(String.class); // use the get method and return the response as a string
 
@@ -61,9 +61,24 @@ public class ProductTable extends HttpServlet {
 			// out.println(jsonResponse);
 
 			for (Product product : productList) {
+				String catsResponse = target.path("v1").path("api").path("products").path("categories")
+						.path(Integer.toString(product.getPid())).request().accept(MediaType.APPLICATION_JSON)
+						.get(String.class);
+
+				ObjectMapper catObjectMapper = new ObjectMapper(); // This object is from the jackson library
+
+				List<Category> categories = catObjectMapper.readValue(catsResponse,
+						new TypeReference<List<Category>>() {
+						});
+
+				String categoriesStr = "";
+				for (Category c : categories) {
+					categoriesStr += c.getCategory() + " ";
+				}
+
 				out.println("<a href=http://localhost:8080/RESTClientServlet/ProductPage.jsp?pid=" + product.getPid()
 						+ ">");
-				out.println("<div id = " + product.getPid() + " class='" + "test product categories" + "'>");
+				out.println("<div id = " + product.getPid() + " class='" + categoriesStr + "'>");
 				out.println("<img src='" + product.getImage() + "'/>");
 				out.println("<div><p>" + product.getName() + "</p><p>" + product.getPrice() + "</p></div></div>");
 				out.println("</a>");

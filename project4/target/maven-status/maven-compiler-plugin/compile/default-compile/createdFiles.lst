@@ -1,7 +1,10 @@
 com/uci/antsrusrestservice/ProductResource.class
+com/uci/antsrusrestservice/ZipResouce.class
 com/uci/antsrusrestservice/model/Order.class
 com/uci/antsrusrestservice/model/Product.class
 com/uci/antsrusrestservice/OrderResource.class
 com/uci/antsrusrestservice/db/DatabaseConnector.class
 com/uci/antsrusrestservice/db/DatabaseUtils.class
 com/uci/antsrusrestservice/service/ProductService.class
+com/uci/antsrusrestservice/model/Category.class
+com/uci/antsrusrestservice/model/ZipCode.class

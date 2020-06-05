@@ -36,10 +36,6 @@
 		<div class="filterblock">
 
 			<div class="filter">
-				<div class="search-container">
-					<label for="search">Search:</label>
-					<input type="text" id="search" name="search">
-				</div>
 				<h3>Filter by Categories</h3>
 				<div class="checkbox">
 					<input type="checkbox" id="floral" name="filter"><label for="floral"><span>Floral</span></label>

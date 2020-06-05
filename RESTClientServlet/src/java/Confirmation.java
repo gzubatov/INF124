@@ -71,6 +71,7 @@ public class Confirmation extends HttpServlet {
 			 * orderSet.getInt("zip_code"); ResultSet addressSet =
 			 * address_statement.executeQuery(address_query); addressSet.next();
 			 */
+
 			String oid = request.getParameter("oid");
 
 			ClientConfig config = new ClientConfig();
@@ -110,7 +111,7 @@ public class Confirmation extends HttpServlet {
 			out.println("<div class=\"logo\"><img src=\"./imgs/ant_logo.png\" alt=\"Ants R Us Logo\"></div>");
 			out.println("<div class=\"pages\">");
 			out.println("<ul class=\"navigation\">");
-			out.println("<li><a href=\"/project3/Index\">Home</a></li>");
+			out.println("<li><a href=\"/RESTClientServlet/index.jsp\">Home</a></li>");
 			out.println("<li><a href=\"./pages/about.html\">About</a></li>");
 			out.println("</ul>");
 			out.println("</div>");
@@ -143,11 +144,15 @@ public class Confirmation extends HttpServlet {
 
 			String[] pids = order.getPids().split(",");
 			String pid;
-			char qt;
+			String qt;
+
 			for (int i = 0; i < pids.length; ++i) {
-				pid = Character.toString(pids[i].charAt(0));
-				qt = pids[i].charAt(2);
-				jsonResponse = target.path("v1").path("api").path("todos").path(pid).request(). // send a request
+				// pid = Character.toString(pids[i].charAt(0));
+				// qt = pids[i].charAt(2);
+				String[] pidQt = pids[i].split(":");
+				pid = pidQt[0];
+				qt = pidQt[1];
+				jsonResponse = target.path("v1").path("api").path("products").path(pid).request(). // send a request
 						accept(MediaType.APPLICATION_JSON). // specify the media type of the response
 						get(String.class); // use the get method and return the response as a string
 				objectMapper = new ObjectMapper(); // This object is from the jackson library

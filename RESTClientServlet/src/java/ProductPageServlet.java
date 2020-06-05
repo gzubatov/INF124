@@ -51,7 +51,7 @@ public class ProductPageServlet extends HttpServlet {
 			WebTarget target = client.target(getBaseURI());
 
 			// .path(request.getParameter("pid"))
-			String jsonResponse = target.path("v1").path("api").path("todos").path(pid).request(). // send a request
+			String jsonResponse = target.path("v1").path("api").path("products").path(pid).request(). // send a request
 					accept(MediaType.APPLICATION_JSON). // specify the media type of the response
 					get(String.class); // use the get method and return the response as a string
 
